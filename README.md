@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In a world where many apps are cluttered with ads and invasive tracking, Plain offers a refreshing alternative. Our open-source Android app is designed to help you manage your private data with ease, without sacrificing your privacy or wasting your time.
+In a world where many apps are cluttered with ads and invasive tracking, Plain offers a refreshing alternative. Plain app is designed to help you manage your private data with ease, without sacrificing your privacy or wasting your time.
 
 With Plain, your phone becomes more than just a plaything. It becomes a powerful tool for managing your digital life.
 
