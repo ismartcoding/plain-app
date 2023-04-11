@@ -1,0 +1,226 @@
+package com.ismartcoding.lib.extensions
+
+import android.app.NotificationManager
+import android.content.Context
+import android.content.pm.PackageManager
+import android.content.pm.ShortcutManager
+import android.database.Cursor
+import android.media.MediaScannerConnection
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import android.telecom.TelecomManager
+import android.util.DisplayMetrics
+import android.view.WindowManager
+import android.widget.TextView
+import androidx.annotation.DimenRes
+import androidx.annotation.DrawableRes
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import java.io.File
+
+
+fun Context.px(@DimenRes dimen: Int): Int = resources.getDimension(dimen).toInt()
+
+fun Context.dp(@DimenRes dimen: Int): Float = resources.getDimensionPixelSize(dimen) / resources.displayMetrics.density
+
+fun Context.getTextWidth(text: String): Float = TextView(this).paint.measureText(text)
+
+fun Context.dp2px(dp: Int): Int = (dp * resources.displayMetrics.density).toInt()
+
+fun Context.getWindowHeight(): Int {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        return getSystemService(WindowManager::class.java).currentWindowMetrics.bounds.height()
+    }
+
+    val outMetrics = DisplayMetrics()
+    val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    @Suppress("DEPRECATION")
+    windowManager.defaultDisplay.getMetrics(outMetrics)
+    return outMetrics.heightPixels
+}
+
+fun Context.getWindowWidth(): Int {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        return getSystemService(WindowManager::class.java).currentWindowMetrics.bounds.width()
+    }
+
+    val outMetrics = DisplayMetrics()
+    val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    @Suppress("DEPRECATION")
+    windowManager.defaultDisplay.getMetrics(outMetrics)
+    return outMetrics.widthPixels
+}
+
+fun Context.getDrawableId(name: String): Int {
+    return resources.getIdentifier(name, "drawable", packageName)
+}
+
+fun Context.hasPermission(vararg permission: String): Boolean {
+    return permission.toSet().all { ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED }
+}
+
+fun Context.queryCursor(
+    uri: Uri,
+    projection: Array<String>? = null,
+    selection: String? = null,
+    selectionArgs: Array<String>? = null,
+    sortOrder: String? = null,
+    callback: (cursor: Cursor) -> Unit
+) {
+    contentResolver.query(uri, projection, selection, selectionArgs, sortOrder)?.use { cursor ->
+        if (cursor.moveToFirst()) {
+            do {
+                callback(cursor)
+            } while (cursor.moveToNext())
+        }
+    }
+}
+
+fun Context.count(
+    uri: Uri, selection: String? = null, selectionArgs: Array<String>? = null
+): Int {
+    var result = 0
+    contentResolver.query(
+        uri, arrayOf("count(*) AS count"),
+        selection,
+        selectionArgs,
+        null
+    )?.run {
+        moveToFirst()
+        if (count > 0) {
+            result = getInt(0)
+        }
+        close()
+    }
+    return result
+}
+
+fun Context.count2(
+    uri: Uri, selection: String? = null, selectionArgs: Array<String>? = null
+): Int {
+    var result = 0
+    contentResolver.query(
+        uri, null,
+        selection,
+        selectionArgs,
+        null
+    )?.run {
+        moveToFirst()
+        result = count
+        close()
+    }
+    return result
+}
+
+fun Context.contentCount(
+    uri: Uri, projection: Array<String> = arrayOf("_id"), selection: String? = null, selectionArgs: Array<String>? = null
+): Int {
+    var result = 0
+    contentResolver.query(
+        uri, projection,
+        selection,
+        selectionArgs,
+        null
+    )?.run {
+        result = count
+    }
+    return result
+}
+
+val Context.telecomManager: TelecomManager get() = getSystemService(Context.TELECOM_SERVICE) as TelecomManager
+val Context.windowManager: WindowManager get() = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+val Context.notificationManager: NotificationManager get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+val Context.shortcutManager: ShortcutManager get() = getSystemService(ShortcutManager::class.java) as ShortcutManager
+
+fun Context.scanFileByConnection(
+    file: File,
+    callback: MediaScannerConnection.OnScanCompletedListener? = null
+) {
+    val path = file.absolutePath
+    val mimeType = file.name.getMimeType()
+    scanFileByConnection(arrayOf(path), arrayOf(mimeType), callback)
+}
+
+fun Context.scanFileByConnection(
+    path: String,
+    callback: MediaScannerConnection.OnScanCompletedListener? = null
+) {
+    val mimeType = path.getMimeType()
+    scanFileByConnection(arrayOf(path), arrayOf(mimeType), callback)
+}
+
+fun Context.scanFileByConnection(
+    paths: Array<String>,
+    mimeTypes: Array<String>? = null,
+    callback: MediaScannerConnection.OnScanCompletedListener? = null
+) {
+    MediaScannerConnection.scanFile(this, paths, mimeTypes, callback)
+}
+
+fun <T> Context.getSystemServiceCompat(serviceClass: Class<T>): T =
+    ContextCompat.getSystemService(this, serviceClass)!!
+
+fun Context.getCompatDrawable(@DrawableRes drawableId: Int) = ContextCompat.getDrawable(this, drawableId)
+
+fun Context.getMimeTypeFromUri(uri: Uri): String {
+    var mimetype = uri.path?.getMimeType() ?: ""
+    if (mimetype.isEmpty()) {
+        try {
+            mimetype = contentResolver.getType(uri) ?: ""
+        } catch (e: IllegalStateException) {
+        }
+    }
+    return mimetype
+}
+
+fun Context.getMediaContentUri(path: String): Uri? {
+    val uri = when {
+        path.isImageFast() -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        path.isVideoFast() -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+        else -> MediaStore.Files.getContentUri("external")
+    }
+
+    return getMediaContent(path, uri)
+}
+
+fun Context.getMediaContent(path: String, baseUri: Uri): Uri? {
+    val projection = arrayOf(MediaStore.Images.Media._ID)
+    val selection = MediaStore.Images.Media.DATA + "= ?"
+    val selectionArgs = arrayOf(path)
+    try {
+        val cursor = contentResolver.query(baseUri, projection, selection, selectionArgs, null)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                val id = cursor.getStringValue(MediaStore.Images.Media._ID)
+                return Uri.withAppendedPath(baseUri, id)
+            }
+        }
+    } catch (e: Exception) {
+    }
+    return null
+}
+
+fun Context.isWifiConnected(): Boolean {
+    val cm = getSystemServiceCompat(ConnectivityManager::class.java)
+    val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)
+    return capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
+}
+
+fun Context.isGestureNavigationBar(): Boolean {
+    val resourceId = resources.getIdentifier("config_navBarInteractionMode", "integer", "android")
+    return resources.getInteger(resourceId) == 2
+}
+
+val Context.actionBarSize
+    get() = theme.obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize))
+        .let { attrs -> attrs.getDimension(0, 0F).toInt().also { attrs.recycle() } }
+
+
+fun Context.hasPermissions(vararg permissions: String): Boolean {
+    return permissions
+        .map { permission -> ActivityCompat.checkSelfPermission(this, permission) }
+        .all { result -> result == PackageManager.PERMISSION_GRANTED }
+}
