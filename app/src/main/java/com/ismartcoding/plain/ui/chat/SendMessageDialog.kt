@@ -11,7 +11,6 @@ import com.ismartcoding.lib.channel.receiveEvent
 import com.ismartcoding.lib.channel.sendEvent
 import com.ismartcoding.lib.extensions.*
 import com.ismartcoding.lib.helpers.CoroutinesHelper.withIO
-import com.ismartcoding.lib.softinput.hideSoftInput
 import com.ismartcoding.lib.softinput.setWindowSoftInput
 import com.ismartcoding.plain.data.enums.PickFileTag
 import com.ismartcoding.plain.data.enums.PickFileType
@@ -21,13 +20,11 @@ import com.ismartcoding.plain.features.ChatInputEditEvent
 import com.ismartcoding.plain.features.PickFileEvent
 import com.ismartcoding.plain.features.PickFileResultEvent
 import com.ismartcoding.plain.features.SendMessageEvent
-import com.ismartcoding.plain.features.chat.ChatCommandType
 import com.ismartcoding.plain.helpers.FileHelper
 import com.ismartcoding.plain.ui.BaseBottomSheetDialog
 import com.ismartcoding.plain.ui.extensions.setSafeClick
 import com.ismartcoding.plain.ui.helpers.DialogHelper
 import com.ismartcoding.plain.ui.views.richtext.CommandAdapter
-import com.ismartcoding.plain.ui.views.richtext.Suggestion
 import java.io.File
 
 class SendMessageDialog() : BaseBottomSheetDialog<DialogSendMessageBinding>() {
@@ -114,13 +111,6 @@ class SendMessageDialog() : BaseBottomSheetDialog<DialogSendMessageBinding>() {
             sendEvent(SendMessageEvent(DMessageContent(DMessageType.TEXT.value, DMessageText(content))))
         }
 
-        binding.cmd.setSafeClick {
-            if (binding.input.isFocused) {
-                binding.input.hideSoftInput()
-            }
-            CommandsDialog().show()
-        }
-
         binding.files.setSafeClick {
             sendEvent(PickFileEvent(PickFileTag.SEND_MESSAGE, PickFileType.FILE, multiple = true))
         }
@@ -130,7 +120,7 @@ class SendMessageDialog() : BaseBottomSheetDialog<DialogSendMessageBinding>() {
         }
 
         binding.input.commandAdapter = CommandAdapter(requireContext()).apply {
-            addAll(ChatCommandType.values().map { Suggestion(it.value) })
+      //      addAll(HomeItemType.values().map { Suggestion(it.value) })
         }
 
         Handler(Looper.getMainLooper()).postDelayed({

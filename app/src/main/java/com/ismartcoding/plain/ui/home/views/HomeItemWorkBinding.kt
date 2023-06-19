@@ -1,7 +1,7 @@
-package com.ismartcoding.plain.ui.chat.views
+package com.ismartcoding.plain.ui.home.views
 
 import com.ismartcoding.plain.R
-import com.ismartcoding.plain.databinding.ChatItemWorkBinding
+import com.ismartcoding.plain.databinding.HomeItemWorkBinding
 import com.ismartcoding.plain.ui.book.BooksDialog
 import com.ismartcoding.plain.ui.extensions.initTheme
 import com.ismartcoding.plain.ui.extensions.setClick
@@ -10,7 +10,9 @@ import com.ismartcoding.plain.ui.extensions.showMore
 import com.ismartcoding.plain.ui.feed.FeedEntriesDialog
 import com.ismartcoding.plain.ui.note.NotesDialog
 
-fun ChatItemWorkBinding.initView() {
+fun HomeItemWorkBinding.initView() {
+    title.setTextColor(title.context.getColor(R.color.primary))
+    title.setText(R.string.home_item_title_work)
     notes
         .initTheme()
         .setKeyText(R.string.notes)

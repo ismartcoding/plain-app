@@ -37,13 +37,6 @@
             tools:ignore="MissingConstraints" />
 
         <ImageButton
-            android:id="@+id/cmd"
-            style="@style/Icon.Chat"
-            app:layout_constraintStart_toEndOf="@id/files"
-            app:srcCompat="@drawable/ic_command"
-            tools:ignore="MissingConstraints" />
-
-        <ImageButton
             android:id="@+id/send"
             style="@style/Icon.Chat"
             app:layout_constraintEnd_toEndOf="parent"

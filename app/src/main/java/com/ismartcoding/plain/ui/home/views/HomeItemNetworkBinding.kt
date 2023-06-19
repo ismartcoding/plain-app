@@ -1,4 +1,4 @@
-package com.ismartcoding.plain.ui.chat.views
+package com.ismartcoding.plain.ui.home.views
 
 import com.ismartcoding.lib.channel.receiveEventHandler
 import com.ismartcoding.lib.channel.sendEvent
@@ -6,22 +6,23 @@ import com.ismartcoding.plain.LocalStorage
 import com.ismartcoding.plain.R
 import com.ismartcoding.plain.data.*
 import com.ismartcoding.plain.data.enums.ActionSourceType
-import com.ismartcoding.plain.databinding.ChatItemNetworkBinding
+import com.ismartcoding.plain.databinding.HomeItemNetworkBinding
 import com.ismartcoding.plain.features.ActionEvent
 import com.ismartcoding.plain.features.ChatItemRefreshEvent
+import com.ismartcoding.plain.features.HomeItemType
 import com.ismartcoding.plain.features.box.FetchNetworksEvent
 import com.ismartcoding.plain.features.box.NetworksResultEvent
-import com.ismartcoding.plain.features.chat.ChatCommandType
 import com.ismartcoding.plain.features.locale.LocaleHelper
 import com.ismartcoding.plain.ui.device.DevicesDialog
 import com.ismartcoding.plain.ui.extensions.*
+import com.ismartcoding.plain.ui.home.HomeItemModel
 import com.ismartcoding.plain.ui.hostapd.HostapdDialog
 import com.ismartcoding.plain.ui.network.NetworkConfigDialog
 import com.ismartcoding.plain.ui.route.RoutesDialog
 import com.ismartcoding.plain.ui.rule.RulesDialog
 import com.ismartcoding.plain.ui.wireguard.WireGuardsDialog
 
-fun ChatItemNetworkBinding.initView() {
+fun HomeItemNetworkBinding.initView() {
     val network = UIDataCache.current().devices
     if (network == null) {
         sendEvent(FetchNetworksEvent(LocalStorage.selectedBoxId))
@@ -30,7 +31,10 @@ fun ChatItemNetworkBinding.initView() {
     updateUI()
 }
 
-private fun ChatItemNetworkBinding.updateUI() {
+private fun HomeItemNetworkBinding.updateUI() {
+    title.setTextColor(title.context.getColor(R.color.primary))
+    title.setText(R.string.home_item_title_network)
+
     networkConfig
         .initTheme()
         .setKeyText(R.string.network_config)
@@ -84,9 +88,9 @@ private fun ChatItemNetworkBinding.updateUI() {
         }
 }
 
-fun ChatItemNetworkBinding.initEvents(m: ChatListView.ChatItemModel) {
+fun HomeItemNetworkBinding.initEvents(m: HomeItemModel) {
     m.events.add(receiveEventHandler<ChatItemRefreshEvent> { event ->
-        if (event.data.type == ChatCommandType.NETWORK.value) {
+        if (event.data.type == HomeItemType.NETWORK.value) {
             state.showLoading()
             sendEvent(FetchNetworksEvent(LocalStorage.selectedBoxId))
         }

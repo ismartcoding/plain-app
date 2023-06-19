@@ -1,13 +1,16 @@
-package com.ismartcoding.plain.ui.chat.views
+package com.ismartcoding.plain.ui.home.views
 
 import com.ismartcoding.plain.R
-import com.ismartcoding.plain.databinding.ChatItemSocialBinding
+import com.ismartcoding.plain.databinding.HomeItemSocialBinding
 import com.ismartcoding.plain.ui.call.CallsDialog
 import com.ismartcoding.plain.ui.contact.ContactsDialog
 import com.ismartcoding.plain.ui.extensions.*
 import com.ismartcoding.plain.ui.sms.SmsDialog
 
-fun ChatItemSocialBinding.initView() {
+fun HomeItemSocialBinding.initView() {
+    title.setTextColor(title.context.getColor(R.color.primary))
+    title.setText(R.string.home_item_title_social)
+
     messages
         .initTheme()
         .setKeyText(R.string.messages)

@@ -1,9 +1,8 @@
-package com.ismartcoding.plain.features.chat
+package com.ismartcoding.plain.features
 
 import com.ismartcoding.plain.features.locale.LocaleHelper
 
-enum class ChatCommandType(val value: String) {
-    APP("app"),
+enum class HomeItemType(val value: String) {
     STORAGE("storage"),
     EDUCATION("education"),
     WORK("work"),
@@ -24,7 +23,7 @@ enum class ChatCommandType(val value: String) {
     }
 
     companion object {
-        fun parse(input: String): ChatCommandType? {
+        fun parse(input: String): HomeItemType? {
             return values().find { it.value == input }
         }
     }
