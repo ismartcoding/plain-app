@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ismartcoding.lib.brv.PageRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    app:srlHeaderTranslationViewId="@id/chat_list">
 
-    <include
-        android:id="@+id/top_app_bar"
-        layout="@layout/view_top_app_bar" />
-
-    <com.ismartcoding.lib.brv.PageRefreshLayout
-        android:id="@+id/page"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:srlHeaderTranslationViewId="@id/chat_list">
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/top_app_bar"
+            layout="@layout/view_top_app_bar"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.ismartcoding.plain.ui.chat.views.ChatListView
             android:id="@+id/chat_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:clipToPadding="false"
-            android:paddingBottom="100dp" />
-    </com.ismartcoding.lib.brv.PageRefreshLayout>
+            app:layout_constraintBottom_toTopOf="@id/chat_input"
+            app:layout_constraintTop_toBottomOf="@id/top_app_bar" />
 
-    <com.ismartcoding.plain.ui.views.MovableFloatingActionButton
-        android:id="@+id/fab"
-        style="@style/Fab"
-        android:src="@drawable/ic_send" />
+        <com.ismartcoding.plain.ui.chat.views.ChatInputView
+            android:id="@+id/chat_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/canvas"
+            android:paddingStart="@dimen/size_normal"
+            android:paddingTop="@dimen/size_sm"
+            android:paddingEnd="@dimen/size_normal"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</com.ismartcoding.lib.brv.PageRefreshLayout>

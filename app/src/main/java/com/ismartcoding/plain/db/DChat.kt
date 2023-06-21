@@ -120,5 +120,8 @@ interface ChatDao {
 
     @Query("DELETE FROM chats WHERE id = :id")
     fun delete(id: String)
+
+    @Query("DELETE FROM chats WHERE id in (:ids)")
+    fun deleteByIds(ids: List<String>)
 }
 

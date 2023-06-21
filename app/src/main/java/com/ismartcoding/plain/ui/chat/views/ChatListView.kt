@@ -1,6 +1,5 @@
 package com.ismartcoding.plain.ui.chat.views
 
-import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
 import android.util.AttributeSet
@@ -22,17 +21,19 @@ import com.ismartcoding.lib.brv.utils.mutable
 import com.ismartcoding.lib.channel.sendEvent
 import com.ismartcoding.lib.extensions.setSelectableItemBackground
 import com.ismartcoding.lib.helpers.CoroutinesHelper.withIO
-import com.ismartcoding.lib.roundview.RoundLinearLayout
-import com.ismartcoding.lib.roundview.setStrokeColor
 import com.ismartcoding.plain.R
 import com.ismartcoding.plain.clipboardManager
-import com.ismartcoding.plain.features.ChatItemRefreshEvent
-import com.ismartcoding.plain.databinding.*
+import com.ismartcoding.plain.databinding.ChatItemFilesBinding
+import com.ismartcoding.plain.databinding.ChatItemImagesBinding
+import com.ismartcoding.plain.databinding.ChatItemNameBinding
+import com.ismartcoding.plain.databinding.ChatItemTextBinding
 import com.ismartcoding.plain.db.AppDatabase
 import com.ismartcoding.plain.db.DChat
 import com.ismartcoding.plain.db.DMessageText
 import com.ismartcoding.plain.db.DMessageType
 import com.ismartcoding.plain.extensions.formatDate
+import com.ismartcoding.plain.features.ChatItemClickEvent
+import com.ismartcoding.plain.features.ChatItemRefreshEvent
 import com.ismartcoding.plain.features.chat.ChatHelper
 import com.ismartcoding.plain.features.locale.LocaleHelper
 import com.ismartcoding.plain.ui.chat.ChatItemDetailDialog
@@ -57,10 +58,6 @@ class ChatListView(context: Context, attrs: AttributeSet? = null) : RecyclerView
     }
 
     data class ChatItemModel(val data: DChat, val events: MutableList<Job> = mutableListOf())
-
-    fun isScrollable(): Boolean {
-        return canScrollHorizontally(1)
-    }
 
     fun initView(lifecycle: Lifecycle) {
         registerLifecycleOwner(lifecycle)
@@ -126,6 +123,9 @@ class ChatListView(context: Context, attrs: AttributeSet? = null) : RecyclerView
                 }
 
                 ChatItemNameBinding.bind(b.root).initView(m.data)
+                itemView.setOnClickListener {
+                    sendEvent(ChatItemClickEvent())
+                }
 
                 var dateVisible = false
                 if (modelPosition == 0) {
@@ -144,8 +144,6 @@ class ChatListView(context: Context, attrs: AttributeSet? = null) : RecyclerView
                         text = m.data.createdAt.formatDate()
                     }
                 }
-                itemView.findViewById<RoundLinearLayout>(R.id.section)?.setStrokeColor(context.getColor(R.color.primary))
-
                 itemView.findViewById<View>(R.id.container).run {
                     setSelectableItemBackground()
                     setOnLongClickListener {
@@ -221,16 +219,17 @@ class ChatListView(context: Context, attrs: AttributeSet? = null) : RecyclerView
     }
 
     suspend fun refreshAsync() {
-        val items = withIO { AppDatabase.instance.chatDao().getAll() }
+        var items = withIO { AppDatabase.instance.chatDao().getAll() }
+        val types = setOf("app", "storage", "work", "social", "exchange")
+        val ids = items.filter { types.contains(it.content.type) }.map { it.id }
+        if (ids.isNotEmpty()) {
+            withIO { AppDatabase.instance.chatDao().deleteByIds(ids) }
+             items = items.filter { !types.contains(it.content.type) }
+        }
         models = items.map { ChatItemModel(it) }
         if (items.isNotEmpty()) {
             scrollToPosition((models?.size ?: 0) - 1)
         }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun refreshUI() {
-        adapter?.notifyDataSetChanged()
     }
 
     private enum class PopupMenuItemType {

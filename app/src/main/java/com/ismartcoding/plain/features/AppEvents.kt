@@ -113,6 +113,8 @@ class FetchLatestExchangeRatesEvent
 
 class AIChatCreatedEvent(val item: DAIChat)
 
+class ChatItemClickEvent
+
 object AppEvents {
     private val mediaPlayer = MediaPlayer()
     private var mediaPlayingUri: Uri? = null
