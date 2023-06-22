@@ -10,7 +10,7 @@ plugins {
     id("kotlin-parcelize")
     kotlin("android")
     kotlin("kapt")
-    kotlin("plugin.serialization") version "1.7.0"
+    kotlin("plugin.serialization") version "1.8.21"
 }
 
 val keystoreProperties = Properties()
@@ -75,6 +75,11 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.7"
     }
 
     packagingOptions {
@@ -105,6 +110,17 @@ dependencies {
     val apolloVersion = "3.2.1"
     val kgraphqlVersion = "0.18.1"
     val ktorVersion = "2.3.1"
+
+    implementation(platform("androidx.compose:compose-bom:2023.06.00"))
+
+    implementation("androidx.compose.runtime:runtime")
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.foundation:foundation")
+    implementation("androidx.compose.foundation:foundation-layout")
+    implementation("androidx.compose.material:material")
+    implementation("androidx.compose.runtime:runtime-livedata")
+    implementation("androidx.compose.ui:ui-tooling")
+    implementation("com.google.accompanist:accompanist-themeadapter-material:0.30.1")
 
     implementation(platform("com.google.firebase:firebase-bom:31.2.1"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
