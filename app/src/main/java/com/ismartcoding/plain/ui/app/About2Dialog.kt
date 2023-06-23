@@ -13,8 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.ismartcoding.plain.LocalStorage
+import com.ismartcoding.plain.R
+import com.ismartcoding.plain.ui.MainActivity
 
-class About2Dialog : BottomSheetDialogFragment() {
+class About2Dialog() : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return ComposeView(requireContext()).apply {
             setContent {
@@ -32,9 +35,14 @@ class About2Dialog : BottomSheetDialogFragment() {
 
     @Composable
     fun CustomListItem(text: String) {
-//        ListItem(
-//            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
-//            text = Text(text),
-//        )
+        ListItem(
+            headlineContent = { Text(getString(R.string.client_id)) },
+            trailingContent = { Text(LocalStorage.clientId) },
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+        )
+    }
+
+    fun show() {
+        super.show(MainActivity.instance.get()!!.supportFragmentManager, this.javaClass.simpleName)
     }
 }
