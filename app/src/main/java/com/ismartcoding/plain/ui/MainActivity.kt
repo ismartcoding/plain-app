@@ -3,22 +3,16 @@ package com.ismartcoding.plain.ui
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.res.Configuration
 import android.database.CursorWindow
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.compose.setContent
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
-import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.lifecycleScope
+import androidx.core.view.WindowCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.ismartcoding.lib.brv.utils.bindingAdapter
 import com.ismartcoding.lib.channel.receiveEvent
 import com.ismartcoding.lib.channel.sendEvent
 import com.ismartcoding.lib.extensions.*
@@ -31,31 +25,26 @@ import com.ismartcoding.plain.data.*
 import com.ismartcoding.plain.data.enums.ExportFileType
 import com.ismartcoding.plain.data.enums.PickFileTag
 import com.ismartcoding.plain.data.enums.PickFileType
-import com.ismartcoding.plain.databinding.ActivityMainBinding
+import com.ismartcoding.plain.data.preference.Language
+import com.ismartcoding.plain.data.preference.SettingsProvider
 import com.ismartcoding.plain.db.*
+import com.ismartcoding.plain.data.preference.language
 import com.ismartcoding.plain.features.*
 import com.ismartcoding.plain.features.bluetooth.BluetoothPermission
-import com.ismartcoding.plain.features.box.BoxHelper
-import com.ismartcoding.plain.features.box.FetchInitDataEvent
-import com.ismartcoding.plain.features.box.InitDataResultEvent
-import com.ismartcoding.plain.features.locale.LocaleHelper
 import com.ismartcoding.plain.features.locale.LocaleHelper.getStringF
-import com.ismartcoding.plain.features.theme.AppThemeHelper
 import com.ismartcoding.plain.mediaProjectionManager
 import com.ismartcoding.plain.services.ScreenMirrorService
-import com.ismartcoding.plain.ui.chat.ChatDialog
 import com.ismartcoding.plain.ui.extensions.*
 import com.ismartcoding.plain.ui.helpers.FilePickHelper
 import com.ismartcoding.plain.ui.models.ShowMessageEvent
+import com.ismartcoding.plain.ui.page.Main
 import com.ismartcoding.plain.web.*
 import io.ktor.server.request.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 
-
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
     private var pickFileType = PickFileType.IMAGE
     private var pickFileTag = PickFileTag.SEND_MESSAGE
     private var exportFileType = ExportFileType.OPML
@@ -82,54 +71,38 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private val pickMultipleMedia =
-        registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
-            if (uris.isNotEmpty()) {
-                sendEvent(PickFileResultEvent(pickFileTag, pickFileType, uris.toSet()))
-            }
+    private val pickMultipleMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
+        if (uris.isNotEmpty()) {
+            sendEvent(PickFileResultEvent(pickFileTag, pickFileType, uris.toSet()))
         }
-
-    private val pickFileActivityLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
-                sendEvent(PickFileResultEvent(pickFileTag, pickFileType, FilePickHelper.getUris(result.data!!)))
-            }
-        }
-
-    private val exportFileActivityLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data = result.data
-                if (data?.data != null) {
-                    sendEvent(ExportFileResultEvent(exportFileType, data.data!!))
-                }
-            }
-        }
-
-    override fun onBackPressed() {
-        moveTaskToBack(false)
     }
 
-    private fun initStatusBar() {
-        immersionBar {
-            transparentBar()
-            titleBar(binding.topAppBar.toolbar)
-            statusBarDarkFont(!AppThemeHelper.isDarkMode())
+    private val pickFileActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+            sendEvent(PickFileResultEvent(pickFileTag, pickFileType, FilePickHelper.getUris(result.data!!)))
+        }
+    }
+
+    private val exportFileActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
+            if (data?.data != null) {
+                sendEvent(ExportFileResultEvent(exportFileType, data.data!!))
+            }
         }
     }
 
     @SuppressLint("ClickableViewAccessibility", "DiscouragedPrivateApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        LocaleHelper.setLocale(this, LocalStorage.appLocale)
+        Language.values().find { it.value == language }?.let {
+            if (it == Language.UseDeviceLanguage) return@let
+            it.setLocale(this)
+        }
 
         instance = WeakReference(this)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        initStatusBar()
 
         // https://stackoverflow.com/questions/51959944/sqliteblobtoobigexception-row-too-big-to-fit-into-cursorwindow-requiredpos-0-t
         try {
@@ -140,41 +113,20 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         }
 
-        if (!isGestureNavigationBar()) {
-            binding.page.updateLayoutParams<CoordinatorLayout.LayoutParams> {
-                bottomMargin = navigationBarHeight
-            }
-        }
-
-        binding.topAppBar.quickNav.updatePadding(0, statusBarHeight, 0, 0)
-        binding.topAppBar.autoStatusBar(window)
-        binding.topAppBar.mainRefresh()
-
         BluetoothPermission.init(this)
         Permissions.init(this)
         initEvents()
 
-        binding.fab.setSafeClick {
-            ChatDialog().show()
+
+        setContent {
+            SettingsProvider {
+                Main()
+            }
         }
 
-        binding.page.pageName = javaClass.simpleName
-        binding.page.run {
-//                onRefresh {
-//                    finishRefresh()
-//                }
-            setEnableRefresh(false)
-        }
-
-        binding.home.initView(lifecycle)
         Permissions.checkNotification(R.string.foreground_service_notification_prompt) {
             sendEvent(StartHttpServerEvent())
         }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        refreshUIForThemeChanged()
     }
 
     override fun onDestroy() {
@@ -183,33 +135,10 @@ class MainActivity : AppCompatActivity() {
         Permissions.release()
     }
 
-    override fun onResume() {
-        super.onResume()
-        // if there is any dialog in front of activity then ignore fetching init data. Case: when choosing file
-        if (!supportFragmentManager.fragments.any { it is DialogFragment }) {
-            lifecycleScope.launch {
-                UIDataCache.current().box = withIO {
-                    BoxHelper.getSelectedBoxAsync()
-                }
-                sendEvent(FetchInitDataEvent.createDefault())
-                binding.topAppBar.mainRefresh()
-                binding.home.refreshUI()
-            }
-        }
-    }
-
     @SuppressLint("CheckResult")
     private fun initEvents() {
         receiveEvent<HttpServerEnabledEvent> {
-            binding.topAppBar.mainRefresh()
-        }
-
-        receiveEvent<InitDataResultEvent> {
-            binding.topAppBar.mainRefresh()
-        }
-
-        receiveEvent<UpdateLocaleEvent> {
-            refreshUIForLocaleChanged()
+//            binding.topAppBar.mainRefresh()
         }
 
         receiveEvent<ShowMessageEvent> { event ->
@@ -226,7 +155,6 @@ class MainActivity : AppCompatActivity() {
                 } else if (LocalStorage.systemScreenTimeout > 0) {
                     contentResolver.setSystemScreenTimeout(LocalStorage.systemScreenTimeout)
                 }
-                binding.topAppBar.mainRefresh()
             }
         }
 
@@ -235,15 +163,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         receiveEvent<UpdateHomeItemEvent> { event ->
-            binding.home.update(event.type)
+//            binding.home.update(event.type)
         }
 
-        receiveEvent<BoxConnectivityStateChangedEvent> {
-            binding.topAppBar.mainRefresh()
-        }
-
-        receiveEvent<EnableWebConsoleEvent> {
-            binding.topAppBar.mainRefresh()
+        receiveEvent<RestartAppEvent> {
+            val intent = Intent(this@MainActivity, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
         }
 
         receiveEvent<PickFileEvent> {
@@ -296,32 +223,25 @@ class MainActivity : AppCompatActivity() {
                 requestToConnectDialog?.dismiss()
                 requestToConnectDialog = null
             }
-            requestToConnectDialog = MaterialAlertDialogBuilder(instance.get()!!)
-                .setTitle(getStringF(R.string.request_to_connect, "ip", clientIp))
-                .setMessage(
+            requestToConnectDialog = MaterialAlertDialogBuilder(instance.get()!!).setTitle(getStringF(R.string.request_to_connect, "ip", clientIp)).setMessage(
                     getStringF(
-                        R.string.client_ua, "os_name", event.osName.capitalize(), "os_version",
-                        event.osVersion, "browser_name", event.browserName.capitalize(), "browser_version", event.browserVersion
+                        R.string.client_ua, "os_name", event.osName.capitalize(), "os_version", event.osVersion, "browser_name", event.browserName.capitalize(), "browser_version", event.browserVersion
                     )
-                )
-                .setPositiveButton(getString(R.string.accept)) { _, _ ->
+                ).setPositiveButton(getString(R.string.accept)) { _, _ ->
                     launch {
                         withIO { respondTokenAsync(event, clientIp) }
                     }
-                }
-                .setNegativeButton(getString(R.string.reject)) { _, _ ->
+                }.setNegativeButton(getString(R.string.reject)) { _, _ ->
                     launch {
                         withIO {
                             event.session.close(
                                 CloseReason(
-                                    CloseReason.Codes.TRY_AGAIN_LATER,
-                                    "rejected"
+                                    CloseReason.Codes.TRY_AGAIN_LATER, "rejected"
                                 )
                             )
                         }
                     }
-                }
-                .create()
+                }.create()
             requestToConnectDialog?.show()
         }
     }
@@ -341,8 +261,7 @@ class MainActivity : AppCompatActivity() {
             CryptoHelper.aesEncrypt(
                 HttpServerManager.passwordToToken(), JsonHelper.jsonEncode(
                     AuthResponse(
-                        AuthStatus.COMPLETED,
-                        token
+                        AuthStatus.COMPLETED, token
                     )
                 )
             )
@@ -350,21 +269,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun doPickFile(event: PickFileEvent) {
-        pickFileActivityLauncher.launch(FilePickHelper.getPickFileIntent(event.type, event.multiple))
-    }
-
-    private fun refreshUIForThemeChanged() {
-        initStatusBar()
-        val context = this
-        window.decorView.setBackgroundColor(context.getColor(R.color.canvas))
-        binding.topAppBar.mainRefresh()
-        binding.topAppBar.refreshUI()
-        binding.home.bindingAdapter.notifyDataSetChanged()
-    }
-
-    private fun refreshUIForLocaleChanged() {
-        binding.topAppBar.mainRefresh()
-        binding.home.bindingAdapter.notifyDataSetChanged()
+        pickFileActivityLauncher.launch(FilePickHelper.getPickFileIntent(event.multiple))
     }
 
     companion object {

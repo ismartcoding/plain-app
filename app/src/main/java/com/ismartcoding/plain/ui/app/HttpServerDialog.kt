@@ -18,6 +18,7 @@ import com.ismartcoding.lib.helpers.NetworkHelper
 import com.ismartcoding.plain.*
 import com.ismartcoding.plain.api.HttpClientManager
 import com.ismartcoding.plain.data.enums.PasswordType
+import com.ismartcoding.plain.data.preference.webConsole
 import com.ismartcoding.plain.databinding.DialogHttpServerBinding
 import com.ismartcoding.plain.databinding.ItemHttpServerHeaderBinding
 import com.ismartcoding.plain.databinding.ItemRowBinding
@@ -40,7 +41,7 @@ class HttpServerDialog : BaseDialog<DialogHttpServerBinding>() {
     private fun updateNotification() {
         if (MainApp.instance.httpServerError.isNotEmpty()) {
             binding.topAppBar.showNotification(MainApp.instance.httpServerError, R.color.red)
-        } else if (LocalStorage.webConsoleEnabled && MainApp.instance.httpServer == null) {
+        } else if (MainApp.instance.webConsole && MainApp.instance.httpServer == null) {
             binding.topAppBar.showNotification(getString(R.string.http_server_failed), R.color.red)
         } else {
             binding.topAppBar.hideNotification()
@@ -66,9 +67,11 @@ class HttpServerDialog : BaseDialog<DialogHttpServerBinding>() {
                             getString(R.string.https_certificate_signature),
                             HttpServerManager.getSSLSignature(context).joinToString(" ") { "%02x".format(it).uppercase() })
                     }
+
                     R.id.sessions -> {
                         SessionsDialog().show()
                     }
+
                     R.id.diagnostics -> {
                         coMain {
                             val client = HttpClientManager.httpClient()
@@ -80,14 +83,23 @@ class HttpServerDialog : BaseDialog<DialogHttpServerBinding>() {
                                 if (r.status == HttpStatusCode.OK) {
                                     DialogHelper.showConfirmDialog(context, getString(R.string.confirm), "Http server is running well.")
                                 } else {
-                                    DialogHelper.showConfirmDialog(context, getString(R.string.error), "Http server is not started. Kill all apps on your phone and start the PlainApp again. Make sure that there are no other apps occupying the HTTP or HTTPS ports. If the problem persists, please provide more details about the issue by contacting ismartcoding@gmail.com.")
+                                    DialogHelper.showConfirmDialog(
+                                        context,
+                                        getString(R.string.error),
+                                        "Http server is not started. Kill all apps on your phone and start the PlainApp again. Make sure that there are no other apps occupying the HTTP or HTTPS ports. If the problem persists, please provide more details about the issue by contacting ismartcoding@gmail.com."
+                                    )
                                 }
                             } catch (ex: Exception) {
                                 DialogHelper.hideLoading()
-                                DialogHelper.showConfirmDialog(context, getString(R.string.error), "Http server is not started. Kill all apps on your phone and start the PlainApp again. Make sure that there are no other apps occupying the HTTP or HTTPS ports. If the problem persists, please provide more details about the issue by contacting ismartcoding@gmail.com.")
+                                DialogHelper.showConfirmDialog(
+                                    context,
+                                    getString(R.string.error),
+                                    "Http server is not started. Kill all apps on your phone and start the PlainApp again. Make sure that there are no other apps occupying the HTTP or HTTPS ports. If the problem persists, please provide more details about the issue by contacting ismartcoding@gmail.com."
+                                )
                             }
                         }
                     }
+
                     R.id.settings -> {
                         HttpServerSettingsDialog().show()
                     }
@@ -102,14 +114,6 @@ class HttpServerDialog : BaseDialog<DialogHttpServerBinding>() {
             onBind {
                 if (itemViewType == R.layout.item_http_server_header) {
                     val b = getBinding<ItemHttpServerHeaderBinding>()
-                    b.enable.setSwitch(LocalStorage.webConsoleEnabled) { _, isEnabled ->
-                        LocalStorage.webConsoleEnabled = isEnabled
-                        sendEvent(HttpServerEnabledEvent(isEnabled))
-                        if (isEnabled) {
-                            requestIgnoreBatteryOptimization()
-                            sendEvent(StartHttpServerEvent())
-                        }
-                    }
                     b.password.run {
                         setValueText(
                             if (LocalStorage.httpServerPasswordType != PasswordType.NONE) LocalStorage.httpServerPassword + " (" + LocalStorage.httpServerPasswordType.getText() + ")" else getString(
@@ -132,7 +136,7 @@ class HttpServerDialog : BaseDialog<DialogHttpServerBinding>() {
                     }
 
                     b.url.text = "https://${NetworkHelper.getDeviceIP4().ifEmpty { "127.0.0.1" }}:${LocalStorage.httpsPort}"
-                    b.tips.text = LocaleHelper.getString(R.string.open_website_on_desktop)
+                    b.tips.text = LocaleHelper.getString(R.string.browser_https_error_tips)
                 } else {
                     val b = getBinding<ItemRowBinding>()
                     val m = getModel<PermissionModel>()
@@ -188,11 +192,13 @@ class HttpServerDialog : BaseDialog<DialogHttpServerBinding>() {
                         subtitle = ""
                         showMore(true)
                     }
+
                     Permission.SYSTEM_ALERT_WINDOW -> {
                         showSwitch = false
                         subtitle = getString(if (it.can()) R.string.system_permission_granted else R.string.system_permission_not_granted)
                         showMore(true)
                     }
+
                     else -> {
                         showSwitch = true
                         subtitle = getString(if (it.can()) R.string.system_permission_granted else R.string.system_permission_not_granted)

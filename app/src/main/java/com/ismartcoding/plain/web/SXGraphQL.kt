@@ -28,6 +28,7 @@ import com.ismartcoding.plain.data.UIDataCache
 import com.ismartcoding.plain.data.enums.ActionSourceType
 import com.ismartcoding.plain.data.enums.ActionType
 import com.ismartcoding.plain.data.enums.TagType
+import com.ismartcoding.plain.data.preference.webConsole
 import com.ismartcoding.plain.db.AppDatabase
 import com.ismartcoding.plain.db.DMessageContent
 import com.ismartcoding.plain.db.DMessageText
@@ -55,7 +56,6 @@ import com.ismartcoding.plain.features.note.NoteHelper
 import com.ismartcoding.plain.features.sms.SmsHelper
 import com.ismartcoding.plain.features.tag.TagHelper
 import com.ismartcoding.plain.features.tag.TagRelationStub
-import com.ismartcoding.plain.features.theme.AppTheme
 import com.ismartcoding.plain.features.video.VideoHelper
 import com.ismartcoding.plain.helpers.FileHelper
 import com.ismartcoding.plain.helpers.TempHelper
@@ -457,8 +457,6 @@ class SXGraphQL(val schema: Schema) {
                             externalFilesDir = context.getExternalFilesDir(null)?.path ?: "",
                             if (LocalStorage.demoMode) "Demo phone" else PhoneHelper.getDeviceName(context),
                             PhoneHelper.getBatteryPercentage(context),
-                            LocalStorage.appLocale,
-                            LocalStorage.appTheme,
                             MainApp.getAppVersion(),
                             Permission.values().filter { it.isEnabled() && it.can() },
                             LocalStorage.audioPlaylist.map { it.toModel() },
@@ -892,7 +890,6 @@ class SXGraphQL(val schema: Schema) {
                         feedEntry?.toModel()
                     }
                 }
-                enum<AppTheme>()
                 enum<MediaPlayMode>()
                 enum<TagType>()
                 enum<Permission>()
@@ -939,7 +936,7 @@ class SXGraphQL(val schema: Schema) {
             val routing: Routing.() -> Unit = {
                 route("/graphql") {
                     post {
-                        if (!LocalStorage.webConsoleEnabled) {
+                        if (!MainApp.instance.webConsole) {
                             call.response.status(HttpStatusCode.BadRequest)
                             return@post
                         }

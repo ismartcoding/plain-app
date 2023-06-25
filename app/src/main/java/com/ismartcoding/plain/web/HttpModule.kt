@@ -15,6 +15,7 @@ import com.ismartcoding.plain.MainApp
 import com.ismartcoding.plain.data.DownloadFileItem
 import com.ismartcoding.plain.data.DownloadFileItemWrap
 import com.ismartcoding.plain.data.enums.PasswordType
+import com.ismartcoding.plain.data.preference.webConsole
 import com.ismartcoding.plain.features.ConfirmToAcceptLoginEvent
 import com.ismartcoding.plain.features.media.CastPlayer
 import com.ismartcoding.plain.helpers.FileHelper
@@ -41,7 +42,6 @@ import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.utils.io.core.*
 import io.ktor.websocket.*
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.json.JSONArray
 import org.json.JSONObject
@@ -89,7 +89,7 @@ fun Application.module() {
         singlePageApplication {
             useResources = true
             ignoreFiles {
-                !LocalStorage.webConsoleEnabled
+                !MainApp.instance.webConsole
             }
             vue("web")
         }

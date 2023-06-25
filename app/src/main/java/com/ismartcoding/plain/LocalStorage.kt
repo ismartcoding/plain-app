@@ -2,7 +2,6 @@ package com.ismartcoding.plain
 
 import com.ismartcoding.lib.serialize.serialLazy
 import com.ismartcoding.plain.features.audio.DPlaylistAudio
-import com.ismartcoding.plain.features.theme.AppTheme
 import com.ismartcoding.plain.features.device.DeviceSortBy
 import com.ismartcoding.plain.features.audio.MediaPlayMode
 import com.ismartcoding.plain.features.file.FileSortBy
@@ -15,7 +14,6 @@ import com.ismartcoding.plain.features.exchange.ExchangeConfig
 object LocalStorage {
     var endictShowWord: Boolean by serialLazy(true)
     var endictShowTranslation: Boolean by serialLazy(true)
-    var webConsoleEnabled: Boolean by serialLazy(false)
     var httpPort: Int by serialLazy(8080)
     var httpsPort: Int by serialLazy(8443)
     var authDevToken: String by serialLazy("")
@@ -23,8 +21,7 @@ object LocalStorage {
     var authTwoFactor: Boolean by serialLazy(true)
     var clientId: String by serialLazy("")
     var fileIdToken: String by serialLazy("") // use to generate file path to id or decrypt file id to path
-    var appLocale: String by serialLazy("")
-    var appTheme: AppTheme by serialLazy(AppTheme.SYSTEM)
+
     var selectedBoxId: String by serialLazy("")
     var deviceSortBy: DeviceSortBy by serialLazy(DeviceSortBy.LAST_ACTIVE)
     var apiPermissions: Set<String> by serialLazy(setOf())

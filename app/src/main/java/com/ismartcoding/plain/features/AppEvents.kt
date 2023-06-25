@@ -58,6 +58,7 @@ class HttpServerEnabledEvent(val enabled: Boolean)
 
 class StartHttpServerEvent
 class StartScreenMirrorEvent
+class RestartAppEvent
 class HttpServerPortChanged
 
 

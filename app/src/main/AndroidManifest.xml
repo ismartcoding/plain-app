@@ -81,6 +81,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:theme="@style/Theme.PlainNew"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.MainActivity"
@@ -90,7 +91,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="user"
             android:supportsPictureInPicture="true"
-            android:theme="@style/Theme.Splash"
+            android:theme="@style/Theme.PlainNew"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
