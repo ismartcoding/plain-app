@@ -34,9 +34,9 @@ android {
             else -> 0
         }
 
-        val vCode = 58
+        val vCode = 64
         versionCode = vCode - singleAbiNum
-        versionName = "1.0.29"
+        versionName = "1.1.0"
 
         ndk {
             if (abiFilterList.isNotEmpty()) {
@@ -114,7 +114,7 @@ dependencies {
     val accompanist = "0.31.4-beta"
     val coil = "2.4.0"
 
-    implementation(platform("androidx.compose:compose-bom:2023.06.00"))
+    implementation(platform("androidx.compose:compose-bom:2023.06.01"))
 
     implementation("com.caverock:androidsvg-aar:1.4")
 

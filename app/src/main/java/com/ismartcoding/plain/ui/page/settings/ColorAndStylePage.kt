@@ -32,8 +32,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.ismartcoding.plain.R
+import com.ismartcoding.plain.data.enums.DarkTheme
 import com.ismartcoding.plain.data.preference.*
 import com.ismartcoding.plain.ui.base.*
+import com.ismartcoding.plain.ui.extensions.navigate
 import com.ismartcoding.plain.ui.page.RouteName
 import com.ismartcoding.plain.ui.svg.PALETTE
 import com.ismartcoding.plain.ui.svg.SVGString
@@ -63,9 +65,7 @@ fun ColorAndStylePage(
         content = {
             LazyColumn {
                 item {
-                    DisplayText(text = stringResource(R.string.color_and_style), desc = "")
-                }
-                item {
+                    DisplayText(text = stringResource(R.string.color_and_style))
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -133,12 +133,10 @@ fun ColorAndStylePage(
                     )
                     PListItem(
                         title = stringResource(R.string.dark_theme),
-                        desc = DarkTheme.values().find { it.value == darkTheme }?.toDesc(context) ?: "",
+                        desc = DarkTheme.values().find { it.value == darkTheme }?.getText(context) ?: "",
                         separatedActions = true,
                         onClick = {
-                            navController.navigate(RouteName.DARK_THEME.name) {
-                                launchSingleTop = true
-                            }
+                            navController.navigate(RouteName.DARK_THEME)
                         },
                     ) {
                         PSwitch(
@@ -147,11 +145,7 @@ fun ColorAndStylePage(
                             DarkThemePreference.put(context, scope, if (it) DarkTheme.ON else DarkTheme.OFF)
                         }
                     }
-                    Spacer(modifier = Modifier.height(24.dp))
-                }
-                item {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                    BottomSpacer()
                 }
             }
         }

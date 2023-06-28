@@ -18,10 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.ismartcoding.plain.R
 import com.ismartcoding.plain.data.preference.AmoledDarkThemePreference
-import com.ismartcoding.plain.data.preference.DarkTheme
+import com.ismartcoding.plain.data.enums.DarkTheme
 import com.ismartcoding.plain.data.preference.DarkThemePreference
 import com.ismartcoding.plain.data.preference.LocalAmoledDarkTheme
 import com.ismartcoding.plain.data.preference.LocalDarkTheme
+import com.ismartcoding.plain.ui.base.BottomSpacer
 import com.ismartcoding.plain.ui.base.DisplayText
 import com.ismartcoding.plain.ui.base.PListItem
 import com.ismartcoding.plain.ui.base.PScaffold
@@ -43,12 +44,10 @@ fun DarkThemePage(
         content = {
             LazyColumn {
                 item {
-                    DisplayText(text = stringResource(R.string.dark_theme), desc = "")
-                }
-                item {
+                    DisplayText(text = stringResource(R.string.dark_theme))
                     DarkTheme.values().map {
                         PListItem(
-                            title = it.toDesc(context),
+                            title = it.getText(context),
                             onClick = {
                                 DarkThemePreference.put(context, scope, it)
                             },
@@ -72,10 +71,7 @@ fun DarkThemePage(
                             AmoledDarkThemePreference.put(context, scope, !amoledDarkTheme)
                         }
                     }
-                }
-                item {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                    BottomSpacer()
                 }
             }
         }

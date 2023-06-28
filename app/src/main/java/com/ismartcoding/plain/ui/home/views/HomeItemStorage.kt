@@ -23,24 +23,28 @@ fun HomeItemStorage() {
         )
         PListItem(
             title = stringResource(R.string.images),
+            showMore = true,
             onClick = {
                 ImagesDialog().show()
             },
         )
         PListItem(
             title = stringResource(R.string.audios),
+            showMore = true,
             onClick = {
                 AudiosDialog().show()
             },
         )
         PListItem(
             title = stringResource(R.string.videos),
+            showMore = true,
             onClick = {
                 VideosDialog().show()
             },
         )
         PListItem(
             title = stringResource(R.string.files),
+            showMore = true,
             onClick = {
                 FilesDialog().show()
             },

@@ -1,10 +1,7 @@
 package com.ismartcoding.plain.ui.page.settings
 
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RadioButton
@@ -16,9 +13,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.ismartcoding.plain.R
-import com.ismartcoding.plain.data.preference.Language
+import com.ismartcoding.plain.data.enums.Language
 import com.ismartcoding.plain.data.preference.LanguagePreference
 import com.ismartcoding.plain.data.preference.LocalLanguage
+import com.ismartcoding.plain.ui.base.BottomSpacer
 import com.ismartcoding.plain.ui.base.DisplayText
 import com.ismartcoding.plain.ui.base.PListItem
 import com.ismartcoding.plain.ui.base.PScaffold
@@ -37,13 +35,13 @@ fun LanguagePage(
         content = {
             LazyColumn {
                 item(key = language) {
-                    DisplayText(text = stringResource(R.string.language), desc = "")
+                    DisplayText(text = stringResource(R.string.language))
                     Spacer(modifier = Modifier.height(16.dp))
                 }
                 item {
                     Language.values().map {
                         PListItem(
-                            title = it.toDesc(context),
+                            title = it.getText(context),
                             onClick = {
                                 LanguagePreference.put(context, scope, it)
                             },
@@ -53,10 +51,7 @@ fun LanguagePage(
                             })
                         }
                     }
-                }
-                item {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                    BottomSpacer()
                 }
             }
         }

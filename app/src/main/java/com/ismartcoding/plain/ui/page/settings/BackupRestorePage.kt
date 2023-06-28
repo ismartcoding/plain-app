@@ -4,20 +4,29 @@ import android.app.Activity
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.ismartcoding.plain.R
 import com.ismartcoding.plain.extensions.formatName
+import com.ismartcoding.plain.ui.base.BlockOutlineButton
+import com.ismartcoding.plain.ui.base.BottomSpacer
 import com.ismartcoding.plain.ui.base.DisplayText
-import com.ismartcoding.plain.ui.base.PListItem
+import com.ismartcoding.plain.ui.base.OutlineButton
 import com.ismartcoding.plain.ui.base.PScaffold
 import com.ismartcoding.plain.ui.helpers.FilePickHelper
 import com.ismartcoding.plain.ui.models.BackupRestoreViewModel
+import org.commonmark.node.Block
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,11 +58,9 @@ fun BackupRestorePage(
         content = {
             LazyColumn {
                 item {
-                    DisplayText(text = stringResource(R.string.backup_restore), desc = "")
-                }
-                item {
-                    PListItem(
-                        title = stringResource(R.string.backup),
+                    DisplayText(text = stringResource(R.string.backup_restore))
+                    BlockOutlineButton(
+                        text = stringResource(R.string.backup),
                         onClick = {
                             exportLauncher.launch(Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                                 type = "text/*"
@@ -62,14 +69,14 @@ fun BackupRestorePage(
                             })
                         },
                     )
-                }
-                item {
-                    PListItem(
-                        title = stringResource(R.string.restore),
+                    Spacer(modifier = Modifier.height(40.dp))
+                    BlockOutlineButton(
+                        text = stringResource(R.string.restore),
                         onClick = {
                             restoreLauncher.launch(FilePickHelper.getPickFileIntent(false))
                         },
                     )
+                    BottomSpacer()
                 }
             }
         }

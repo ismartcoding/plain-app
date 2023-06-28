@@ -7,20 +7,57 @@ import android.net.Uri
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ismartcoding.lib.channel.sendEvent
+import com.ismartcoding.lib.helpers.CoroutinesHelper.withIO
 import com.ismartcoding.plain.BuildConfig
-import com.ismartcoding.plain.data.preference.WebConsolePreference
+import com.ismartcoding.plain.R
+import com.ismartcoding.plain.api.HttpClientManager
+import com.ismartcoding.plain.data.preference.WebPreference
 import com.ismartcoding.plain.features.HttpServerEnabledEvent
 import com.ismartcoding.plain.features.StartHttpServerEvent
+import com.ismartcoding.plain.ui.helpers.DialogHelper
+import io.ktor.client.request.get
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class WebConsoleViewModel : ViewModel() {
     fun enableWebConsole(context: Context, scope: CoroutineScope, enable: Boolean) {
-        WebConsolePreference.put(context, scope, enable)
+        WebPreference.put(context, scope, enable)
         sendEvent(HttpServerEnabledEvent(enable))
         if (enable) {
             requestIgnoreBatteryOptimization(context)
             sendEvent(StartHttpServerEvent())
+        }
+    }
+
+    fun dig(context: Context, httpPort: Int) {
+        viewModelScope.launch {
+            val client = HttpClientManager.httpClient()
+            DialogHelper.showLoading()
+            val errorMessage =
+                "Http server is not started. Kill all apps on your phone and start the PlainApp again. Make sure that there are no other apps occupying the HTTP or HTTPS ports. If the problem persists, please provide more details about the issue by contacting ismartcoding@gmail.com."
+            try {
+                val r = withIO { client.get("http://127.0.0.1:${httpPort}/health_check") }
+                DialogHelper.hideLoading()
+                if (r.status == HttpStatusCode.OK) {
+                    DialogHelper.showConfirmDialog(context, context.getString(R.string.confirm), "Http server is running well.")
+                } else {
+                    DialogHelper.showConfirmDialog(
+                        context,
+                        context.getString(R.string.error),
+                        errorMessage
+                    )
+                }
+            } catch (ex: Exception) {
+                DialogHelper.hideLoading()
+                DialogHelper.showConfirmDialog(
+                    context,
+                    context.getString(R.string.error),
+                    errorMessage
+                )
+            }
         }
     }
 

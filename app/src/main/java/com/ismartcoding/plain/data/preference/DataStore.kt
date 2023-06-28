@@ -15,12 +15,6 @@ import java.io.IOException
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-val Context.language: Int
-    get() = dataStore.get(DataStoreKeys.Language) ?: 0
-
-val Context.webConsole: Boolean
-    get() = dataStore.get(DataStoreKeys.WebConsole) ?: false
-
 suspend fun <T> DataStore<Preferences>.put(key: Preferences.Key<T>, value: T) {
     this.edit {
         withContext(Dispatchers.IO) {

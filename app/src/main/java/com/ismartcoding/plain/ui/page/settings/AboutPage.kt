@@ -15,10 +15,13 @@ import com.ismartcoding.plain.BuildConfig
 import com.ismartcoding.plain.LocalStorage
 import com.ismartcoding.plain.MainApp
 import com.ismartcoding.plain.R
+import com.ismartcoding.plain.TempData
+import com.ismartcoding.plain.ui.base.BottomSpacer
 import com.ismartcoding.plain.ui.base.DisplayText
 import com.ismartcoding.plain.ui.base.PListItem
 import com.ismartcoding.plain.ui.base.PScaffold
 import com.ismartcoding.plain.ui.base.PSwitch
+import com.ismartcoding.plain.ui.extensions.navigate
 import com.ismartcoding.plain.ui.helpers.WebHelper
 import com.ismartcoding.plain.ui.models.BackupRestoreViewModel
 import com.ismartcoding.plain.ui.page.RouteName
@@ -30,53 +33,41 @@ fun AboutPage(
     viewModel: BackupRestoreViewModel = viewModel(),
 ) {
     val context = LocalContext.current
-    var demoMode by remember { mutableStateOf(LocalStorage.demoMode) }
+    var demoMode by remember { mutableStateOf(TempData.demoMode) }
 
     PScaffold(
         navController,
         content = {
             LazyColumn {
                 item {
-                    DisplayText(text = stringResource(R.string.about), desc = "")
-                }
-                item {
+                    DisplayText(text = stringResource(R.string.about))
                     PListItem(
                         title = stringResource(R.string.client_id),
-                        desc = LocalStorage.clientId
+                        value = LocalStorage.clientId
                     )
-                }
-                item {
                     PListItem(
                         title = stringResource(R.string.app_version),
-                        desc = MainApp.getAppVersion(),
+                        value = MainApp.getAppVersion(),
                     )
-                }
-                item {
                     PListItem(
                         title = stringResource(R.string.android_version),
-                        desc = MainApp.getAndroidVersion(),
+                        value = MainApp.getAndroidVersion(),
                     )
-                }
-                item {
                     PListItem(
                         title = stringResource(R.string.donation),
+                        showMore = true,
                         onClick = {
                             WebHelper.open(context, "https://ko-fi.com/ismartcoding")
                         }
                     )
-                }
-                item {
                     PListItem(
                         title = stringResource(R.string.logs),
+                        showMore = true,
                         onClick = {
-                            navController.navigate(RouteName.LOGS.name) {
-                                launchSingleTop = true
-                            }
+                            navController.navigate(RouteName.LOGS)
                         }
                     )
-                }
-                if (BuildConfig.DEBUG) {
-                    item {
+                    if (BuildConfig.DEBUG) {
                         PListItem(
                             title = stringResource(R.string.demo_mode),
                         ) {
@@ -84,10 +75,11 @@ fun AboutPage(
                                 activated = demoMode
                             ) {
                                 demoMode = it
-                                LocalStorage.demoMode = it
+                                TempData.demoMode = it
                             }
                         }
                     }
+                    BottomSpacer()
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.ismartcoding.plain.ui.base
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -10,6 +11,7 @@ import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -32,6 +34,7 @@ fun PTextField(
     isPassword: Boolean = false,
     placeholder: String = "",
     errorMessage: String = "",
+    requestFocus: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
 ) {
@@ -39,15 +42,22 @@ fun PTextField(
     val focusRequester = remember { FocusRequester() }
     var showPassword by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        delay(100)  // ???
-        focusRequester.requestFocus()
+    if (requestFocus) {
+        LaunchedEffect(Unit) {
+            delay(100)
+            focusRequester.requestFocus()
+        }
     }
 
+
     TextField(
-        modifier = Modifier.focusRequester(focusRequester),
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color.Transparent,
+        modifier = Modifier
+            .focusRequester(focusRequester)
+            .fillMaxWidth(),
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
         ),
         maxLines = if (singleLine) 1 else Int.MAX_VALUE,
         enabled = !readOnly,

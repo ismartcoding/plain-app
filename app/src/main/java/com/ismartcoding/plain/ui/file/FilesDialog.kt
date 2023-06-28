@@ -140,7 +140,7 @@ class FilesDialog : BaseDialog<DialogFilesBinding>() {
                 } else if (m.data.path.isAudioFast()) {
                     try {
                         AudioPlayerDialog().show()
-                        Permissions.checkNotification(R.string.audio_notification_prompt) {
+                        Permissions.checkNotification(requireContext(), R.string.audio_notification_prompt) {
                             AudioPlayerService.play(requireContext(), DPlaylistAudio.fromPath(context, m.data.path))
                         }
                     } catch (ex: Exception) {
@@ -295,8 +295,8 @@ class FilesDialog : BaseDialog<DialogFilesBinding>() {
     }
 
     private fun checkPermission() {
-        binding.breadcrumb.isVisible = Permission.WRITE_EXTERNAL_STORAGE.can()
-        binding.list.checkPermission(Permission.WRITE_EXTERNAL_STORAGE)
+        binding.breadcrumb.isVisible = Permission.WRITE_EXTERNAL_STORAGE.can(requireContext())
+        binding.list.checkPermission(requireContext(), Permission.WRITE_EXTERNAL_STORAGE)
     }
 
     private fun updateList() {

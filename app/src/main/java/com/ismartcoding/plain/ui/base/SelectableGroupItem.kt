@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -19,14 +20,17 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ismartcoding.plain.R
 
 @Composable
 fun SelectableGroupItem(
     modifier: Modifier = Modifier,
     enable: Boolean = true,
     selected: Boolean = false,
+    showMore: Boolean = false,
     title: String,
     desc: String? = null,
     icon: ImageVector? = null,
@@ -51,7 +55,7 @@ fun SelectableGroupItem(
                     color = if (selected) MaterialTheme.colorScheme.onSurface else Color.Unspecified,
                     shape = RoundedCornerShape(24.dp)
                 )
-                .padding(8.dp, 16.dp),
+                .padding(0.dp, 16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             icon?.let {
@@ -78,6 +82,15 @@ fun SelectableGroupItem(
                         style = MaterialTheme.typography.bodyMedium,
                     )
                 }
+            }
+            if (showMore) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_chevron_right),
+                    modifier = Modifier
+                        .size(24.dp),
+                    contentDescription = title,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         }
     }

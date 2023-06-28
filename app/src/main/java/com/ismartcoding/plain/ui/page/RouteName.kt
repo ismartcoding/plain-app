@@ -10,4 +10,8 @@ enum class RouteName {
     ABOUT,
     LOGS,
     WEB_CONSOLE,
+    PASSWORD,
+    TEXT,
+    SESSIONS,
+    WEB_DEV
 }

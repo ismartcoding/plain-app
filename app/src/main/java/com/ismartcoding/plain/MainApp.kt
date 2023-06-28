@@ -8,6 +8,7 @@ import com.ismartcoding.lib.logcat.DiskLogAdapter
 import com.ismartcoding.lib.logcat.DiskLogFormatStrategy
 import com.ismartcoding.lib.logcat.LogCat
 import com.ismartcoding.plain.data.enums.PasswordType
+import com.ismartcoding.plain.data.preference.PasswordTypePreference
 import com.ismartcoding.plain.features.AppEvents
 import com.ismartcoding.plain.features.bluetooth.BluetoothEvents
 import com.ismartcoding.plain.features.box.BoxEvents
@@ -45,7 +46,7 @@ class MainApp : Application() {
         BoxEvents.register()
 
         coIO {
-            if (LocalStorage.httpServerPasswordType == PasswordType.RANDOM) {
+            if (PasswordTypePreference.get(instance) == PasswordType.RANDOM.value) {
                 HttpServerManager.resetPassword()
             }
             HttpServerManager.loadTokenCache()

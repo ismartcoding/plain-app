@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -53,7 +54,7 @@ fun PScaffold(
             }
         },
         content = {
-            Column {
+            Column(modifier = Modifier.navigationBarsPadding()) {
                 Spacer(modifier = Modifier.height(it.calculateTopPadding()))
                 content()
             }

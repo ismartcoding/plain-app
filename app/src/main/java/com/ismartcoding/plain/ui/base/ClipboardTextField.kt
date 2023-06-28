@@ -3,6 +3,7 @@ package com.ismartcoding.plain.ui.base
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -30,10 +31,10 @@ fun ClipboardTextField(
     errorText: String = "",
     imeAction: ImeAction = ImeAction.Done,
     focusManager: FocusManager? = null,
+    requestFocus: Boolean = false,
     onConfirm: (String) -> Unit = {},
 ) {
     Column(modifier = modifier) {
-        Spacer(modifier = Modifier.height(10.dp))
         PTextField(
             readOnly = readOnly,
             value = value,
@@ -42,6 +43,7 @@ fun ClipboardTextField(
             placeholder = placeholder,
             isPassword = isPassword,
             errorMessage = errorText,
+            requestFocus = requestFocus,
             keyboardActions = KeyboardActions(
                 onDone = if (imeAction == ImeAction.Done)
                     action(focusManager, onConfirm, value) else null,
@@ -73,7 +75,6 @@ fun ClipboardTextField(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(10.dp))
     }
 }
 

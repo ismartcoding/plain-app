@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
-import com.ismartcoding.plain.data.preference.DarkTheme
+import com.ismartcoding.plain.data.enums.DarkTheme
 import com.ismartcoding.plain.data.preference.LocalAmoledDarkTheme
 import com.ismartcoding.plain.data.preference.LocalDarkTheme
 

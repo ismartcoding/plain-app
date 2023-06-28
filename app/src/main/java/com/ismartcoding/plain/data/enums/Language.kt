@@ -1,10 +1,8 @@
-package com.ismartcoding.plain.data.preference
+package com.ismartcoding.plain.data.enums
 
 import android.content.Context
 import android.os.LocaleList
 import com.ismartcoding.plain.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import java.util.*
 
 enum class Language(val value: Int) {
@@ -12,7 +10,7 @@ enum class Language(val value: Int) {
     English(1),
     ChineseSimplified(2);
 
-    fun toDesc(context: Context): String =
+    fun getText(context: Context): String =
         when (this) {
             UseDeviceLanguage -> context.getString(R.string.use_device_language)
             English -> context.getString(R.string.english)
@@ -46,16 +44,3 @@ enum class Language(val value: Int) {
         }
 }
 
-object LanguagePreference {
-    val default = Language.UseDeviceLanguage.value
-
-    fun put(context: Context, scope: CoroutineScope, value: Language) {
-        scope.launch {
-            context.dataStore.put(
-                DataStoreKeys.Language,
-                value.value
-            )
-            value.setLocale(context)
-        }
-    }
-}

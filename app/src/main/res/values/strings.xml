@@ -42,6 +42,8 @@
     <string name="accept">Accept</string>
     <string name="request_to_connect">{{ip}} requests to connect</string>
     <string name="client_ua">OS: {{os_name}} {{os_version}}\nBrowser: {{browser_name}} {{browser_version}}</string>
+    <string name="os">OS</string>
+    <string name="browser">Browser</string>
     <string name="reject">Reject</string>
     <string name="error">Error</string>
     <string name="more">More</string>
@@ -255,8 +257,9 @@
     <string name="allow_new_login">Allow new login</string>
     <string name="https_certificate_signature">HTTPS certificate signature</string>
     <string name="sessions">Sessions</string>
-    <string name="diagnostics">Diagnostics</string>
+    <string name="http_server_diagnostics">HTTP Server diagnostics</string>
     <string name="reset_password">Reset password</string>
+    <string name="reset_token">Reset token</string>
     <string name="token">Token</string>
     <string name="testing_token">Token</string>
     <string name="api_url">API URL</string>
@@ -437,7 +440,7 @@
     <string name="recommended_https">HTTPS (Recommended)</string>
     <string name="enter_this_address_tips">Please enter the above address in your PC web browser.</string>
     <string name="last_visit_at">Last visit at</string>
-    <string name="must_in_the_same_lan">Your PC and mobile device must be in the same subnet. To maximize your phone\'s performance, please connect the USB adapter to a power outlet.</string>
+    <string name="web_console_desc">Your PC and mobile device must be in the same subnet. To maximize your phone\'s performance, please connect the USB adapter to a power outlet.</string>
     <string name="fetch_content_automatically">Automatic fetch content</string>
     <string name="app_restored">APP data is restored, you need to force quit this app and start the app again as new.</string>
     <string name="welcome_text">Welcome to this app! Easily send text, images, and videos to view them on your PC.</string>

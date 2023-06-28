@@ -9,47 +9,69 @@ import com.ismartcoding.plain.ui.extensions.collectAsStateValue
 import kotlinx.coroutines.flow.map
 
 data class Settings(
-    // Theme
-    val themeIndex: Int = ThemeIndexPreference.default,
-    val customPrimaryColor: String = CustomPrimaryColorPreference.default,
-    val darkTheme: Int = DarkThemePreference.default,
-    val amoledDarkTheme: Boolean = AmoledDarkThemePreference.default,
-
-    val language: Int = LanguagePreference.default,
-    val webConsole: Boolean = WebConsolePreference.default,
+    val themeIndex: Int,
+    val customPrimaryColor: String,
+    val darkTheme: Int,
+    val amoledDarkTheme: Boolean,
+    val language: Int,
+    val web: Boolean,
+    val keepScreenOn: Boolean,
+    val systemScreenTimeout: Int,
 )
 
-// Theme
+
+
 val LocalThemeIndex = compositionLocalOf { ThemeIndexPreference.default }
 val LocalCustomPrimaryColor = compositionLocalOf { CustomPrimaryColorPreference.default }
 val LocalDarkTheme = compositionLocalOf { DarkThemePreference.default }
 val LocalAmoledDarkTheme = compositionLocalOf { AmoledDarkThemePreference.default }
-
 val LocalLanguage = compositionLocalOf { LanguagePreference.default }
-val LocalWebConsole = compositionLocalOf { WebConsolePreference.default }
+val LocalWeb = compositionLocalOf { WebPreference.default }
+val LocalKeepScreenOn = compositionLocalOf { KeepScreenOnPreference.default }
+val LocalSystemScreenTimeout = compositionLocalOf { SystemScreenTimeoutPreference.default }
 
 @Composable
 fun SettingsProvider(
     content: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
+    val defaultSettings = Settings(
+        themeIndex = ThemeIndexPreference.default,
+        customPrimaryColor = CustomPrimaryColorPreference.default,
+        darkTheme = DarkThemePreference.default,
+        amoledDarkTheme = AmoledDarkThemePreference.default,
+        language = LanguagePreference.default,
+        web = WebPreference.default,
+        keepScreenOn = KeepScreenOnPreference.default,
+        systemScreenTimeout = SystemScreenTimeoutPreference.default,
+    )
     val settings = remember {
         context.dataStore.data.map {
-            it.toSettings()
+            Settings(
+                themeIndex = ThemeIndexPreference.get(it),
+                customPrimaryColor = CustomPrimaryColorPreference.get(it),
+                darkTheme = DarkThemePreference.get(it),
+                amoledDarkTheme = AmoledDarkThemePreference.get(it),
+                language = LanguagePreference.get(it),
+                web = WebPreference.get(it),
+                keepScreenOn = KeepScreenOnPreference.get(it),
+                systemScreenTimeout = SystemScreenTimeoutPreference.get(it),
+            )
         }
-    }.collectAsStateValue(initial = Settings())
+    }.collectAsStateValue(
+        initial = defaultSettings
+    )
 
     CompositionLocalProvider(
-        // Theme
         LocalThemeIndex provides settings.themeIndex,
         LocalCustomPrimaryColor provides settings.customPrimaryColor,
         LocalDarkTheme provides settings.darkTheme,
         LocalAmoledDarkTheme provides settings.amoledDarkTheme,
-
         LocalLanguage provides settings.language,
-        LocalWebConsole provides settings.webConsole,
+        LocalWeb provides settings.web,
+        LocalKeepScreenOn provides settings.keepScreenOn,
+        LocalSystemScreenTimeout provides settings.systemScreenTimeout,
     ) {
         content()
     }
 }
-

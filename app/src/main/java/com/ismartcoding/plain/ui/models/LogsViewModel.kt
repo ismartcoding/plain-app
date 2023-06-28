@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ismartcoding.lib.helpers.CoroutinesHelper
 import com.ismartcoding.lib.helpers.CoroutinesHelper.withIO
 import com.ismartcoding.lib.logcat.DiskLogFormatStrategy
 import com.ismartcoding.plain.Constants

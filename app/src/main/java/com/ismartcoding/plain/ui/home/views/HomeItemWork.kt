@@ -21,12 +21,14 @@ fun HomeItemWork() {
         )
         PListItem(
             title = stringResource(R.string.notes),
+            showMore = true,
             onClick = {
                 NotesDialog().show()
             },
         )
         PListItem(
             title = stringResource(R.string.feeds),
+            showMore = true,
             onClick = {
                 FeedEntriesDialog().show()
             },

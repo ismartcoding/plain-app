@@ -19,6 +19,8 @@
     <string name="confirm">确认</string>
     <string name="request_to_connect">{{ip}}请求连接</string>
     <string name="client_ua">操作系统：{{os_name}} {{os_version}}\n浏览器：{{browser_name}} {{browser_version}}</string>
+    <string name="os">操作系统</string>
+    <string name="browser">浏览器</string>
     <string name="accept">允许</string>
     <string name="reject">拒绝</string>
     <string name="bluetooth_error_message">无法连接蓝牙</string>
@@ -255,8 +257,9 @@
     <string name="allow_new_login">允许新的登录</string>
     <string name="https_certificate_signature">HTTPS证书签名</string>
     <string name="sessions">会话列表</string>
-    <string name="diagnostics">诊断</string>
+    <string name="http_server_diagnostics">HTTP服务诊断</string>
     <string name="reset_password">重置密码</string>
+    <string name="reset_token">重置令牌</string>
     <string name="token">令牌</string>
     <string name="testing_token">测试令牌</string>
     <string name="api_url">API地址</string>
@@ -436,7 +439,7 @@
     <string name="recommended_https">HTTPS（推荐）</string>
     <string name="enter_this_address_tips">在您的电脑浏览器中输入以上地址。</string>
     <string name="last_visit_at">最后访问时间</string>
-    <string name="must_in_the_same_lan">您的电脑和手机必须在同一个子网中。为了最大化手机的性能，请将 USB 适配器连接到电源插座。</string>
+    <string name="web_console_desc">您的电脑和手机必须在同一个子网中。为了最大化手机的性能，请将 USB 适配器连接到电源插座。</string>
     <string name="fetch_content_automatically">自动拉取正文内容</string>
     <string name="app_restored">应用数据已经恢复，您需要重启应用。</string>
     <string name="welcome_text">欢迎使用！您可以轻松地将文本、图片和视频发送到本页面，并在您的电脑上查看。</string>

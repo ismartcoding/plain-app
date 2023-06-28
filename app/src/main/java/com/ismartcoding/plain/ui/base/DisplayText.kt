@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -17,7 +18,7 @@ import androidx.compose.ui.unit.dp
 fun DisplayText(
     modifier: Modifier = Modifier,
     text: String,
-    desc: String,
+    desc: String = "",
 ) {
     Column(
         modifier = modifier
@@ -39,10 +40,8 @@ fun DisplayText(
         PExtensibleVisibility(visible = desc.isNotEmpty()) {
             Text(
                 text = desc,
-                style = MaterialTheme.typography.labelMedium.copy(
-                    baselineShift = BaselineShift.Superscript
-                ),
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Light),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }

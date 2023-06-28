@@ -14,6 +14,7 @@ import com.ismartcoding.plain.R
 import com.ismartcoding.plain.ui.base.DisplayText
 import com.ismartcoding.plain.ui.base.PScaffold
 import com.ismartcoding.plain.ui.base.SelectableGroupItem
+import com.ismartcoding.plain.ui.extensions.navigate
 import com.ismartcoding.plain.ui.page.RouteName
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,53 +27,41 @@ fun SettingsPage(
         content = {
             LazyColumn {
                 item {
-                    DisplayText(text = stringResource(R.string.settings), desc = "")
-                }
-                item {
+                    DisplayText(text = stringResource(R.string.settings))
                     SelectableGroupItem(
                         title = stringResource(R.string.color_and_style),
                         desc = stringResource(R.string.color_and_style_desc),
                         icon = Icons.Outlined.Palette,
+                        showMore = true,
                         onClick = {
-                            navController.navigate(RouteName.COLOR_AND_STYLE.name) {
-                                launchSingleTop = true
-                            }
+                            navController.navigate(RouteName.COLOR_AND_STYLE)
                         },
                     )
-                }
-                item {
                     SelectableGroupItem(
                         title = stringResource(R.string.language),
                         desc = stringResource(R.string.language_desc),
                         icon = Icons.Outlined.Language,
+                        showMore = true,
                         onClick = {
-                            navController.navigate(RouteName.LANGUAGE.name) {
-                                launchSingleTop = true
-                            }
+                            navController.navigate(RouteName.LANGUAGE)
                         },
                     )
-                }
-                item {
                     SelectableGroupItem(
                         title = stringResource(R.string.backup_restore),
                         desc = stringResource(R.string.backup_desc),
                         icon = Icons.Outlined.Backup,
+                        showMore = true,
                         onClick = {
-                            navController.navigate(RouteName.BACKUP_RESTORE.name) {
-                                launchSingleTop = true
-                            }
+                            navController.navigate(RouteName.BACKUP_RESTORE)
                         },
                     )
-                }
-                item {
                     SelectableGroupItem(
                         title = stringResource(R.string.about),
                         desc = stringResource(R.string.about_desc),
                         icon = Icons.Outlined.TipsAndUpdates,
+                        showMore = true,
                         onClick = {
-                            navController.navigate(RouteName.ABOUT.name) {
-                                launchSingleTop = true
-                            }
+                            navController.navigate(RouteName.ABOUT)
                         },
                     )
                 }
