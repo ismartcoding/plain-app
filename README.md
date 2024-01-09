@@ -193,5 +193,17 @@ storeFile=release.jks
 
 [![Star History Chart](https://api.star-history.com/svg?repos=ismartcoding/plain-app&type=Date)](https://star-history.com/#ismartcoding/plain-app&Date)
 
+[kayravlone](https://github.com/kayravlone)
+## Our Proposed Solution
+
+Our proposed solution involves:
+
+1. **QR Code Generator on the Plain-App Site:** A dedicated section on the website would enable users to effortlessly generate QR codes containing the desired HTTPS link.
+
+2. **QR Code Reader within the Plain-App Application:** The application would be equipped with a QR code scanning feature, empowering users to seamlessly scan the generated codes directly from their phones.
+
+3. **Seamless Redirection Upon QR Code Scan:** Upon successful QR code scanning within the Plain-App application, the user would be automatically redirected to the corresponding HTTPS link, establishing a swift and effortless connection between their phone and PC.
+
+We believe that this integrated QR code approach would significantly simplify the connection process, foster a more intuitive user experience, and ultimately bolster the overall efficiency of Plain-App.
 
 
