@@ -315,8 +315,6 @@
     <string name="routes">Маршруты</string>
     <string name="create_route">Создать маршрут</string>
     <string name="edit_route">Редактировать маршрут</string>
-    <string name="create_vocabulary">Создать словарь</string>
-    <string name="edit_vocabulary">Редактировать словарь</string>
     <string name="add">Добавить</string>
     <string name="import_opml_file">Импортировать из OPML</string>
     <string name="export_opml_file">Экспортировать в OPML</string>
@@ -411,13 +409,6 @@
     <string name="template">Шаблон</string>
     <string name="sort_by_random">Сортировать случайно</string>
     <string name="select_a_template">Выберите шаблон</string>
-    <string name="vocabulary_cet4">Словарь CET-4</string>
-    <string name="vocabulary_cet6">Словарь CET-6</string>
-    <string name="vocabulary_chuzhong">Словарь средней школы</string>
-    <string name="vocabulary_gaozhong">Словарь старшей школы</string>
-    <string name="vocabulary_xiaoxue">Словарь начальной школы</string>
-    <string name="vocabulary_kaoyan">Словарь аспиранта</string>
-    <string name="vocabulary_none">Пустой список</string>
     <string name="edit">Редактировать</string>
     <string name="preview">Предпросмотр</string>
     <string name="edit_mode">Режим редактирования</string>

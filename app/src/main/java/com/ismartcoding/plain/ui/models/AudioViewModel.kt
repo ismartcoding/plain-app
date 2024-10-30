@@ -41,8 +41,8 @@ class AudioViewModel(private val savedStateHandle: SavedStateHandle) : ISelectab
     override val selectedIds = mutableStateListOf<String>()
 
     suspend fun moreAsync(context: Context, tagsViewModel: TagsViewModel) {
-        offset.value += limit.value
-        val items = AudioMediaStoreHelper.searchAsync(context, getQuery(), limit.value, offset.value, sortBy.value)
+        offset.value += limit.intValue
+        val items = AudioMediaStoreHelper.searchAsync(context, getQuery(), limit.intValue, offset.intValue, sortBy.value)
         _itemsFlow.update {
             val mutableList = it.toMutableStateList()
             mutableList.addAll(items)
@@ -50,14 +50,14 @@ class AudioViewModel(private val savedStateHandle: SavedStateHandle) : ISelectab
         }
         tagsViewModel.loadMoreAsync(items.map { it.id }.toSet())
         showLoading.value = false
-        noMore.value = items.size < limit.value
+        noMore.value = items.size < limit.intValue
     }
 
     suspend fun loadAsync(context: Context, tagsViewModel: TagsViewModel) {
-        offset.value = 0
-        _itemsFlow.value = AudioMediaStoreHelper.searchAsync(context, getQuery(), limit.value, offset.value, sortBy.value).toMutableStateList()
+        offset.intValue = 0
+        _itemsFlow.value = AudioMediaStoreHelper.searchAsync(context, getQuery(), limit.intValue, offset.intValue, sortBy.value).toMutableStateList()
         tagsViewModel.loadAsync(_itemsFlow.value.map { it.id }.toSet())
-        total.value = AudioMediaStoreHelper.countAsync(context, getTotalQuery())
+        total.intValue = AudioMediaStoreHelper.countAsync(context, getTotalQuery())
         noMore.value = _itemsFlow.value.size < limit.value
         showLoading.value = false
     }

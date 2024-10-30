@@ -52,20 +52,20 @@ class FeedEntriesViewModel(private val savedStateHandle: SavedStateHandle) :
     override val selectedIds = mutableStateListOf<String>()
 
     suspend fun moreAsync(tagsViewModel: TagsViewModel) {
-        offset.value += limit.value
-        val items = FeedEntryHelper.search(getQuery(), limit.value, offset.value)
+        offset.value += limit.intValue
+        val items = FeedEntryHelper.search(getQuery(), limit.intValue, offset.intValue)
         _itemsFlow.value.addAll(items)
         tagsViewModel.loadMoreAsync(items.map { it.id }.toSet())
         showLoading.value = false
-        noMore.value = items.size < limit.value
+        noMore.value = items.size < limit.intValue
     }
 
     suspend fun loadAsync(tagsViewModel: TagsViewModel) {
-        offset.value = 0
+        offset.intValue = 0
         val query = getQuery()
-        _itemsFlow.value = FeedEntryHelper.search(query, limit.value, offset.value).toMutableStateList()
+        _itemsFlow.value = FeedEntryHelper.search(query, limit.intValue, offset.intValue).toMutableStateList()
         refreshTabsAsync(tagsViewModel)
-        noMore.value = _itemsFlow.value.size < limit.value
+        noMore.value = _itemsFlow.value.size < limit.intValue
         showLoading.value = false
     }
 
@@ -76,10 +76,10 @@ class FeedEntriesViewModel(private val savedStateHandle: SavedStateHandle) :
     // for updating tags, delete items
     suspend fun refreshTabsAsync(tagsViewModel: TagsViewModel) {
         tagsViewModel.loadAsync(_itemsFlow.value.map { it.id }.toSet())
-        total.value = FeedEntryHelper.count(getTotalAllQuery())
-        totalToday.value = FeedEntryHelper.count(getTotalTodayQuery())
+        total.intValue = FeedEntryHelper.count(getTotalAllQuery())
+        totalToday.intValue = FeedEntryHelper.count(getTotalTodayQuery())
         tabs.value = listOf(
-            VTabData(LocaleHelper.getString(R.string.all), "all", total.value),
+            VTabData(LocaleHelper.getString(R.string.all), "all", total.intValue),
             VTabData(LocaleHelper.getString(R.string.today), "today", totalToday.value),
             * tagsViewModel.itemsFlow.value.map { VTabData(it.name, it.id, it.count) }.toTypedArray()
         )

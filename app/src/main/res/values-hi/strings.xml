@@ -315,8 +315,6 @@
     <string name="routes">रूट</string>
     <string name="create_route">रूट बनाएं</string>
     <string name="edit_route">रूट संपादित करें</string>
-    <string name="create_vocabulary">शब्दावली बनाएं</string>
-    <string name="edit_vocabulary">शब्दावली संपादित करें</string>
     <string name="add">जोड़ें</string>
     <string name="import_opml_file">OPML से आयात करें</string>
     <string name="export_opml_file">OPML में निर्यात करें</string>
@@ -411,13 +409,6 @@
     <string name="template">टेम्पलेट</string>
     <string name="sort_by_random">यादृच्छिक आधार पर क्रमबद्ध करें</string>
     <string name="select_a_template">कृपया एक टेम्पलेट चुनें</string>
-    <string name="vocabulary_cet4">CET-4 शब्दावली</string>
-    <string name="vocabulary_cet6">CET-6 शब्दावली</string>
-    <string name="vocabulary_chuzhong">माध्यमिक विद्यालय शब्दावली</string>
-    <string name="vocabulary_gaozhong">उच्च विद्यालय शब्दावली</string>
-    <string name="vocabulary_xiaoxue">प्राथमिक विद्यालय शब्दावली</string>
-    <string name="vocabulary_kaoyan">स्नातक शब्दावली</string>
-    <string name="vocabulary_none">खाली सूची</string>
     <string name="edit">संपादित करें</string>
     <string name="preview">पूर्वावलोकन</string>
     <string name="edit_mode">संपादन मोड</string>

@@ -30,6 +30,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -76,8 +77,6 @@ import com.ismartcoding.plain.ui.base.pullrefresh.rememberRefreshLayoutState
 import com.ismartcoding.plain.ui.base.tabs.PScrollableTabRow
 import com.ismartcoding.plain.ui.components.FeedEntryListItem
 import com.ismartcoding.plain.ui.components.ListSearchBar
-import com.ismartcoding.plain.ui.nav.navigate
-import com.ismartcoding.plain.ui.nav.navigateDetail
 import com.ismartcoding.plain.ui.nav.navigateTags
 import com.ismartcoding.plain.ui.extensions.reset
 import com.ismartcoding.plain.ui.helpers.DialogHelper
@@ -92,13 +91,13 @@ import com.ismartcoding.plain.ui.models.select
 import com.ismartcoding.plain.ui.models.showBottomActions
 import com.ismartcoding.plain.ui.models.toggleSelectAll
 import com.ismartcoding.plain.ui.models.toggleSelectMode
-import com.ismartcoding.plain.ui.nav.RouteName
 import com.ismartcoding.plain.workers.FeedFetchWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ismartcoding.plain.ui.nav.Routing
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -121,7 +120,7 @@ fun FeedEntriesPage(
     val tagsState by tagsViewModel.itemsFlow.collectAsState()
     val tagsMapState by tagsViewModel.tagsMapFlow.collectAsState()
     val scope = rememberCoroutineScope()
-    val events by remember { mutableStateOf<MutableList<Job>>(arrayListOf()) }
+    val events = remember { mutableStateListOf<Job>() }
     val scrollStateMap = remember {
         mutableStateMapOf<Int, LazyListState>()
     }
@@ -325,7 +324,7 @@ fun FeedEntriesPage(
                                 contentDescription = stringResource(R.string.subscriptions),
                                 tint = MaterialTheme.colorScheme.onSurface,
                             ) {
-                                navController.navigate(RouteName.FEEDS)
+                                navController.navigate(Routing.Feeds)
                             }
                         }
                         ActionButtonMoreWithMenu { dismiss ->
@@ -340,7 +339,7 @@ fun FeedEntriesPage(
                             if (viewModel.feedId.value.isEmpty()) {
                                 PDropdownMenuItemSettings(onClick = {
                                     dismiss()
-                                    navController.navigate(RouteName.FEED_SETTINGS)
+                                    navController.navigate(Routing.FeedSettings)
                                 })
                             }
                         }
@@ -444,7 +443,7 @@ fun FeedEntriesPage(
                                             if (viewModel.selectMode.value) {
                                                 viewModel.select(m.id)
                                             } else {
-                                                navController.navigateDetail(RouteName.FEED_ENTRIES, m.id)
+                                                navController.navigate(Routing.FeedEntry(m.id))
                                             }
                                         },
                                         onLongClick = {

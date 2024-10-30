@@ -62,7 +62,7 @@ import com.ismartcoding.plain.ui.extensions.reset
 import com.ismartcoding.plain.ui.models.AppsViewModel
 import com.ismartcoding.plain.ui.models.enterSearchMode
 import com.ismartcoding.plain.ui.models.exitSearchMode
-import com.ismartcoding.plain.ui.nav.RouteName
+import com.ismartcoding.plain.ui.nav.Routing
 import com.ismartcoding.plain.ui.theme.PlainTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -242,7 +242,7 @@ fun AppsPage(
                                         item = m,
                                         modifier = PlainTheme.getCardModifier(),
                                         onClick = {
-                                            navController.navigate("${RouteName.APPS.name}/${m.id}")
+                                            navController.navigate(Routing.AppDetails(m.id))
                                         }
                                     )
                                     VerticalSpace(dp = 8.dp)

@@ -315,8 +315,6 @@
     <string name="routes">Rotas</string>
     <string name="create_route">Criar rota</string>
     <string name="edit_route">Editar rota</string>
-    <string name="create_vocabulary">Criar vocabulário</string>
-    <string name="edit_vocabulary">Editar vocabulário</string>
     <string name="add">Adicionar</string>
     <string name="import_opml_file">Importar de OPML</string>
     <string name="export_opml_file">Exportar para OPML</string>
@@ -411,13 +409,6 @@
     <string name="template">Modelo</string>
     <string name="sort_by_random">Ordenar aleatoriamente</string>
     <string name="select_a_template">Selecione um modelo</string>
-    <string name="vocabulary_cet4">Vocabulário CET-4</string>
-    <string name="vocabulary_cet6">Vocabulário CET-6</string>
-    <string name="vocabulary_chuzhong">Vocabulário de ensino fundamental</string>
-    <string name="vocabulary_gaozhong">Vocabulário de ensino médio</string>
-    <string name="vocabulary_xiaoxue">Vocabulário de ensino fundamental</string>
-    <string name="vocabulary_kaoyan">Vocabulário de pós-graduação</string>
-    <string name="vocabulary_none">Lista vazia</string>
     <string name="edit">Editar</string>
     <string name="preview">Pré-visualização</string>
     <string name="edit_mode">Modo de edição</string>

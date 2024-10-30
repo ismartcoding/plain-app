@@ -161,18 +161,9 @@ type Query {
 
   searchEndictByWords(words: [String!]!): [EndictItem!]!
 
-  vocabularies: [Vocabulary!]!
-
-  vocabulary(id: ID!): Vocabulary
 }
 
 scalar Time
-
-type Vocabulary {
-  id: ID!
-
-  words: [String!]!
-}
 
 type WireGuard {
   isActive: Boolean!

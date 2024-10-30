@@ -315,8 +315,6 @@
     <string name="routes">Routes</string>
     <string name="create_route">Create route</string>
     <string name="edit_route">Edit route</string>
-    <string name="create_vocabulary">Create vocabulary</string>
-    <string name="edit_vocabulary">Edit vocabulary</string>
     <string name="add">Add</string>
     <string name="import_opml_file">Import from OPML</string>
     <string name="export_opml_file">Export to OPML</string>
@@ -411,13 +409,6 @@
     <string name="template">Template</string>
     <string name="sort_by_random">Sort by random</string>
     <string name="select_a_template">Select a template</string>
-    <string name="vocabulary_cet4">CET-4 vocabulary</string>
-    <string name="vocabulary_cet6">CET-6 vocabulary</string>
-    <string name="vocabulary_chuzhong">Junior high school vocabulary</string>
-    <string name="vocabulary_gaozhong">High school vocabulary</string>
-    <string name="vocabulary_xiaoxue">Elementary school vocabulary</string>
-    <string name="vocabulary_kaoyan">Postgraduate vocabulary</string>
-    <string name="vocabulary_none">Empty list</string>
     <string name="edit">Edit</string>
     <string name="preview">Preview</string>
     <string name="edit_mode">Edit mode</string>

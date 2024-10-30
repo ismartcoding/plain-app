@@ -12,10 +12,10 @@ import com.ismartcoding.plain.R
 import kotlin.math.abs
 
 class CustomAppBarLayout(context: Context, attributeSet: AttributeSet? = null) : AppBarLayout(context, attributeSet) {
-    lateinit var quickNav: QuickNav
+    private lateinit var quickNav: QuickNav
     private var downRawY = 0f
 
-    var dragToExpandEnabled = false // drag to expand the app bar.
+    private var dragToExpandEnabled = false // drag to expand the app bar.
 
     public override fun onFinishInflate() {
         super.onFinishInflate()

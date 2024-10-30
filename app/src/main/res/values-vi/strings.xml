@@ -315,8 +315,6 @@
     <string name="routes">Tuyến đường</string>
     <string name="create_route">Tạo tuyến đường</string>
     <string name="edit_route">Chỉnh sửa tuyến đường</string>
-    <string name="create_vocabulary">Tạo từ vựng</string>
-    <string name="edit_vocabulary">Chỉnh sửa từ vựng</string>
     <string name="add">Thêm</string>
     <string name="import_opml_file">Nhập từ OPML</string>
     <string name="export_opml_file">Xuất ra OPML</string>
@@ -411,13 +409,6 @@
     <string name="template">Mẫu</string>
     <string name="sort_by_random">Sắp xếp ngẫu nhiên</string>
     <string name="select_a_template">Chọn một mẫu</string>
-    <string name="vocabulary_cet4">Từ vựng CET-4</string>
-    <string name="vocabulary_cet6">Từ vựng CET-6</string>
-    <string name="vocabulary_chuzhong">Từ vựng trung học cơ sở</string>
-    <string name="vocabulary_gaozhong">Từ vựng trung học phổ thông</string>
-    <string name="vocabulary_xiaoxue">Từ vựng tiểu học</string>
-    <string name="vocabulary_kaoyan">Từ vựng sau đại học</string>
-    <string name="vocabulary_none">Danh sách trống</string>
     <string name="edit">Chỉnh sửa</string>
     <string name="preview">Xem trước</string>
     <string name="edit_mode">Chế độ chỉnh sửa</string>

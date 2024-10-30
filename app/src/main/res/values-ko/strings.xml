@@ -315,8 +315,6 @@
     <string name="routes">경로</string>
     <string name="create_route">경로 생성</string>
     <string name="edit_route">경로 편집</string>
-    <string name="create_vocabulary">어휘 생성</string>
-    <string name="edit_vocabulary">어휘 편집</string>
     <string name="add">추가</string>
     <string name="import_opml_file">OPML에서 가져오기</string>
     <string name="export_opml_file">OPML로 내보내기</string>
@@ -411,13 +409,6 @@
     <string name="template">템플릿</string>
     <string name="sort_by_random">랜덤 정렬</string>
     <string name="select_a_template">템플릿 선택</string>
-    <string name="vocabulary_cet4">CET-4 어휘</string>
-    <string name="vocabulary_cet6">CET-6 어휘</string>
-    <string name="vocabulary_chuzhong">중학교 어휘</string>
-    <string name="vocabulary_gaozhong">고등학교 어휘</string>
-    <string name="vocabulary_xiaoxue">초등학교 어휘</string>
-    <string name="vocabulary_kaoyan">석사 어휘</string>
-    <string name="vocabulary_none">빈 목록</string>
     <string name="edit">편집</string>
     <string name="preview">미리보기</string>
     <string name="edit_mode">편집 모드</string>

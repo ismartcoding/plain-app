@@ -26,7 +26,7 @@ fun PModalBottomSheet(
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 0.dp,
         onDismissRequest = onDismissRequest,
-        windowInsets = WindowInsets(0, 0, 0, 0),
+        contentWindowInsets = { WindowInsets(0, 0, 0, 0) },
         content = content
     )
 }

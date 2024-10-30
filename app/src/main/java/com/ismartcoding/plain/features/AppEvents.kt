@@ -37,6 +37,7 @@ import com.ismartcoding.plain.web.websocket.EventType
 import com.ismartcoding.plain.web.websocket.WebSocketEvent
 import com.ismartcoding.plain.web.websocket.WebSocketHelper
 import io.ktor.server.websocket.DefaultWebSocketServerSession
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import kotlin.time.Duration.Companion.seconds
@@ -70,16 +71,6 @@ class DeleteChatItemViewEvent(val id: String)
 class DeviceNameUpdatedEvent(val id: String, val name: String?)
 
 class CurrentBoxChangedEvent
-
-class VocabularyCreatedEvent
-
-class VocabularyUpdatedEvent
-
-class VocabularyDeletedEvent(val id: String)
-
-class VocabularyWordsDeletedEvent(val id: String)
-
-class VocabularyWordsUpdatedEvent(val id: String)
 
 class ConfirmToAcceptLoginEvent(
     val session: DefaultWebSocketServerSession,
@@ -195,11 +186,17 @@ object AppEvents {
 
         receiveEventHandler<StartHttpServerEvent> {
             coIO {
-                try {
-                    val context = MainApp.instance
-                    context.startService(Intent(context, HttpServerService::class.java))
-                } catch (ex: Exception) {
-                    LogCat.e(ex.toString())
+                var retry = 3
+                while (retry > 0) {
+                    try {
+                        val context = MainApp.instance
+                        context.startService(Intent(context, HttpServerService::class.java))
+                        break
+                    } catch (ex: Exception) {
+                        LogCat.e(ex.toString())
+                        delay(500)
+                        retry--
+                    }
                 }
             }
         }

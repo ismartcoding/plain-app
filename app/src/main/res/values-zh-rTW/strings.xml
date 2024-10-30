@@ -315,8 +315,6 @@
     <string name="routes">路由</string>
     <string name="create_route">創建路由</string>
     <string name="edit_route">編輯路由</string>
-    <string name="create_vocabulary">創建詞彙本</string>
-    <string name="edit_vocabulary">編輯詞彙本</string>
     <string name="add">添加</string>
     <string name="import_opml_file">導入OPML文件</string>
     <string name="export_opml_file">導出OPML文件</string>
@@ -411,13 +409,6 @@
     <string name="template">模板</string>
     <string name="sort_by_random">隨機排序</string>
     <string name="select_a_template">選擇一個模板</string>
-    <string name="vocabulary_cet4">CET-4詞彙</string>
-    <string name="vocabulary_cet6">CET-6詞彙</string>
-    <string name="vocabulary_chuzhong">初中詞彙</string>
-    <string name="vocabulary_gaozhong">高中詞彙</string>
-    <string name="vocabulary_xiaoxue">小學詞彙</string>
-    <string name="vocabulary_kaoyan">考研詞彙</string>
-    <string name="vocabulary_none">空列表</string>
     <string name="edit">編輯</string>
     <string name="preview">預覽</string>
     <string name="edit_mode">編輯模式</string>

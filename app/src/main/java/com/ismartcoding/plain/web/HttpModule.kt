@@ -49,6 +49,7 @@ import com.ismartcoding.plain.preference.PasswordTypePreference
 import com.ismartcoding.plain.web.websocket.WebSocketSession
 import io.ktor.client.request.get
 import io.ktor.client.statement.readBytes
+import io.ktor.client.statement.readRawBytes
 import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -91,9 +92,9 @@ import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 import io.ktor.server.websocket.WebSockets
 import io.ktor.server.websocket.webSocket
-import io.ktor.util.toByteArray
 import io.ktor.utils.io.core.use
 import io.ktor.utils.io.jvm.javaio.copyTo
+import io.ktor.utils.io.toByteArray
 import io.ktor.websocket.CloseReason
 import io.ktor.websocket.Frame
 import io.ktor.websocket.close
@@ -223,7 +224,7 @@ object HttpModule {
                         try {
                             val client = HttpClientManager.browserClient()
                             val r = client.get(path)
-                            call.respondBytes(r.readBytes(), r.contentType() ?: ContentType.Application.OctetStream)
+                            call.respondBytes(r.readRawBytes(), r.contentType() ?: ContentType.Application.OctetStream)
                         } catch (e: IOException) {
                             call.respondText("Failed to fetch data from URL: $path", status = HttpStatusCode.InternalServerError)
                         }

@@ -119,7 +119,7 @@ object BoxApi {
     fun disposeApolloClients(boxId: String) {
         clients.toMap().forEach {
             if (it.key.startsWith(boxId)) {
-                it.value.dispose()
+                it.value.close()
                 clients.remove(it.key)
             }
         }

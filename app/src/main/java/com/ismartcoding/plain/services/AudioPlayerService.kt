@@ -153,7 +153,7 @@ class AudioPlayerService : MediaLibraryService() {
         return session
     }
 
-    override fun onTaskRemoved(rootIntent: Intent) {
+    override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
         stopSelf()
     }

@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -63,9 +64,8 @@ import com.ismartcoding.plain.ui.base.TopSpace
 import com.ismartcoding.plain.ui.base.VerticalSpace
 import com.ismartcoding.plain.ui.components.home.HomeFeatures
 import com.ismartcoding.plain.ui.components.home.HomeWeb
-import com.ismartcoding.plain.ui.nav.navigate
 import com.ismartcoding.plain.ui.models.MainViewModel
-import com.ismartcoding.plain.ui.nav.RouteName
+import com.ismartcoding.plain.ui.nav.Routing
 import com.ismartcoding.plain.web.HttpServerManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -82,7 +82,7 @@ fun HomePage(
     val keepScreenOn = LocalKeepScreenOn.current
     val configuration = LocalConfiguration.current
     val itemWidth = (configuration.screenWidthDp.dp - 97.dp) / 3
-    val events by remember { mutableStateOf<MutableList<Job>>(arrayListOf()) }
+    val events = remember { mutableStateListOf<Job>() }
     val webEnabled = LocalWeb.current
     var systemAlertWindow by remember { mutableStateOf(Permission.SYSTEM_ALERT_WINDOW.can(context)) }
     var isVPNConnected by remember { mutableStateOf(NetworkHelper.isVPNConnected(context)) }
@@ -116,7 +116,7 @@ fun HomePage(
                 navController = navController,
                 navigationIcon = {
                     ActionButtonSettings(showBadge = AppFeatureType.CHECK_UPDATES.has() && newVersion.whetherNeedUpdate(currentVersion, skipVersion)) {
-                        navController.navigate(RouteName.SETTINGS)
+                        navController.navigate(Routing.Settings)
                     }
                 },
                 title = stringResource(id = R.string.app_name),
@@ -153,7 +153,7 @@ fun HomePage(
                             )
                         }, onClick = {
                             dismiss()
-                            navController.navigate(RouteName.SCAN)
+                            navController.navigate(Routing.Scan)
                         }, text = {
                             Text(text = stringResource(R.string.scan_qrcode))
                         })
@@ -165,7 +165,7 @@ fun HomePage(
             PDraggableElement {
                 FloatingActionButton(
                     onClick = {
-                        navController.navigate(RouteName.CHAT)
+                        navController.navigate(Routing.Chat)
                     },
                 ) {
                     Icon(

@@ -315,8 +315,6 @@
     <string name="routes">Rotalar</string>
     <string name="create_route">Rota Oluştur</string>
     <string name="edit_route">Rotayı Düzenle</string>
-    <string name="create_vocabulary">Kelime Dağarcığı Oluştur</string>
-    <string name="edit_vocabulary">Kelime Dağarcığını Düzenle</string>
     <string name="add">Ekle</string>
     <string name="import_opml_file">OPML\'den İçe Aktar</string>
     <string name="export_opml_file">OPML\'yi Dışa Aktar</string>
@@ -411,13 +409,6 @@
     <string name="template">Şablon</string>
     <string name="sort_by_random">Rastgele sırala</string>
     <string name="select_a_template">Bir şablon seçin</string>
-    <string name="vocabulary_cet4">CET-4 kelime dağarcığı</string>
-    <string name="vocabulary_cet6">CET-6 kelime dağarcığı</string>
-    <string name="vocabulary_chuzhong">Ortaokul kelime dağarcığı</string>
-    <string name="vocabulary_gaozhong">Lise kelime dağarcığı</string>
-    <string name="vocabulary_xiaoxue">İlkokul kelime dağarcığı</string>
-    <string name="vocabulary_kaoyan">Lisansüstü kelime dağarcığı</string>
-    <string name="vocabulary_none">Boş liste</string>
     <string name="edit">Düzenle</string>
     <string name="preview">Önizleme</string>
     <string name="edit_mode">Düzenleme modu</string>

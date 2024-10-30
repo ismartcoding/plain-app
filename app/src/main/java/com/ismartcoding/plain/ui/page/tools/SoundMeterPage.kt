@@ -23,6 +23,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -67,7 +68,7 @@ fun SoundMeterPage(navController: NavHostController) {
     var avg by remember { mutableFloatStateOf(0f) }
     var max by remember { mutableFloatStateOf(0f) }
     var isRunning by remember { mutableStateOf(false) }
-    val events by remember { mutableStateOf<MutableList<Job>>(arrayListOf()) }
+    val events = remember { mutableStateListOf<Job>() }
     var decibel by remember { mutableFloatStateOf(0f) }
     val decibelValueStrings = stringArrayResource(R.array.decibel_values)
     val decibelValueString by remember(decibel) {

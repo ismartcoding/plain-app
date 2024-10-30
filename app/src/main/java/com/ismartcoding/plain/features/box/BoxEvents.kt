@@ -52,8 +52,6 @@ data class CancelActiveJobEvent(val boxId: String, val eventClass: Class<Any>)
 
 data class InitDataResultEvent(val boxId: String, val result: GraphqlApiResult<InitQuery.Data>)
 
-data class VocabulariesResultEvent(val boxId: String, val result: GraphqlApiResult<VocabulariesQuery.Data>)
-
 object BoxEvents {
     private val eventJobs: MutableMap<String, Job> = mutableMapOf()
 
@@ -140,22 +138,6 @@ object BoxEvents {
                         }
                     }
                     sendEvent(WireGuardsResultEvent(event.boxId, r))
-                }
-            }
-        }
-
-        receiveEventHandler<FetchVocabulariesEvent> { event ->
-            safeRun(event) {
-                launch {
-                    val r = withIO { BoxApi.mixQueryAsync(VocabulariesQuery()) }
-                    if (r.isSuccess()) {
-                        r.response?.data?.let { data ->
-                            UIDataCache.current().run {
-                                vocabularies = data.vocabularies
-                            }
-                        }
-                    }
-                    sendEvent(VocabulariesResultEvent(event.boxId, r))
                 }
             }
         }

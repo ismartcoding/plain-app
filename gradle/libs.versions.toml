@@ -2,43 +2,43 @@
 androidGifDrawableVersion="1.2.28"
 appcompatVersion="1.7.0"
 bcprovJdk15onVersion="1.70"
-coil="3.0.0-alpha06"
-coreKtxVersion="1.13.1"
+coil="3.1.0"
+coreKtxVersion="1.15.0"
 exoplayerVersion="2.19.1"
 firebaseCrashlyticsGradleVersion="3.0.1"
 fragmentKtxVersion="1.8.0"
 glideVersion="4.16.0"
 googleServicesVersion="4.4.2"
-gradle= "8.3.2"
-accompanistDrawablepainterVersion = "0.34.0"
-cameraCoreVersion = "1.4.0-beta02"
-apollo = "3.2.1"
-compose = "1.6.8"
-activityComposeVersion = "1.9.0"
-composeBom = "2024.06.00"
+gradle= "8.8.0"
+accompanistDrawablepainterVersion = "0.36.0"
+cameraCoreVersion = "1.4.1"
+apollo = "3.8.5"
+compose = "1.7.7"
+activityComposeVersion = "1.10.0"
+composeBom = "2025.01.01"
 coreSplashscreenVersion = "1.0.1"
 coreVersion = "3.5.3"
 datastorePreferencesVersion = "1.1.1"
-firebaseCrashlyticsKtxVersion = "19.0.1"
-firebaseBomVersion = "33.1.0"
+firebaseCrashlyticsKtxVersion = "19.4.0"
+firebaseBomVersion = "33.8.0"
 gsonVersion="2.10.1"
 guavaVersion="33.0.0-jre"
 jsoupVersion="1.15.3"
 kgraphql = "0.19.0"
-kotlinGradlePluginVersion="1.9.23"
-kotlinxDatetimeVersion="0.5.0"
-kotlinxSerializationJsonVersion="1.6.3"
-kotlinxCoroutinesVersion ="1.8.1"
-ktor = "3.0.0-beta-1"
+kotlin ="2.1.10"
+kotlinxDatetimeVersion="0.6.1"
+kotlinxSerializationJsonVersion="1.7.3"
+kotlinxCoroutinesVersion ="1.10.1"
+ktor = "3.0.3"
 leakcanaryAndroidVersion = "2.12"
 lifecycleExtensionsVersion="2.2.0"
-lifecycleViewmodelKtxVersion="2.8.3"
+lifecycleViewmodelKtxVersion="2.8.7"
 markwon="4.6.2"
 materialVersion="1.12.0"
-media3 = "1.3.1"
-navigationComposeVersion = "2.7.7"
-materialIconsExtendedVersion = "1.7.0-beta03"
-material3Version = "1.2.1"
+media3 = "1.4.1"
+navigationComposeVersion = "2.8.6"
+materialIconsExtendedVersion = "1.7.7"
+material3Version = "1.3.1"
 okhttpVersion="4.12.0"
 openaiClientVersion = "3.6.2"
 pdfiumAndroidVersion="1.9.0"
@@ -51,7 +51,7 @@ transitionVersion="1.5.0"
 viewpager2Version = "1.1.0"
 workRuntimeKtxVersion = "2.9.0"
 ztZipVersion = "1.16"
-devtoolsKspVersion = "1.9.23-1.0.20"
+devtoolsKspVersion = "2.1.10-1.0.29"
 pagingVersion = "3.3.0"
 
 [libraries]
@@ -72,7 +72,7 @@ coil-video = { module = "io.coil-kt.coil3:coil-video", version.ref = "coil" }
 coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
-coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil" }
+coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 
 androidx-transition = { module = "androidx.transition:transition", version.ref = "transitionVersion" }
 firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradleVersion" }
@@ -119,6 +119,7 @@ compose-foundation = { module = "androidx.compose.foundation:foundation", versio
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtendedVersion" }
 compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3Version" }
 
+
 # firebase
 firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx", version.ref = "firebaseCrashlyticsKtxVersion" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
@@ -138,7 +139,7 @@ apollo-normalized-cache = { module = "com.apollographql.apollo3:apollo-normalize
 apollo-runtime = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apollo" }
 
 # kotlin
-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinGradlePluginVersion" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetimeVersion" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJsonVersion" }
 kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "kotlinxCoroutinesVersion" }
@@ -196,3 +197,5 @@ zt-zip = { module = "org.zeroturnaround:zt-zip", version.ref = "ztZipVersion" }
 
 [plugins]
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "devtoolsKspVersion" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

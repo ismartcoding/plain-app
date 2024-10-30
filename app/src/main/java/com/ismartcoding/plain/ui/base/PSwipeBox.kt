@@ -1,6 +1,8 @@
 package com.ismartcoding.plain.ui.base
 
+import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
@@ -184,6 +186,7 @@ fun rememberAnchoredDraggableState(
     positionalThreshold: (distance: Float) -> Float = { distance -> distance },
     velocityThreshold: Dp = 100.dp,
     animationSpec: TweenSpec<Float> = TweenSpec(durationMillis = 200),
+    decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay<Float>()
 ): AnchoredDraggableState<DragAnchors> {
     val density = LocalDensity.current
     return remember {
@@ -191,7 +194,8 @@ fun rememberAnchoredDraggableState(
             initialValue = initialValue,
             positionalThreshold = positionalThreshold,
             velocityThreshold = { with(density) { velocityThreshold.toPx() } },
-            animationSpec = animationSpec
+            snapAnimationSpec = animationSpec,
+            decayAnimationSpec = decayAnimationSpec,
         )
     }
 }

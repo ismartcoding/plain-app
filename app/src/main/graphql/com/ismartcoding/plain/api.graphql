@@ -49,20 +49,6 @@ query SearchEndictByWords($words: [String!]!) {
     }
 }
 
-query VocabulariesQuery {
-    vocabularies {
-        id
-    }
-}
-
-query VocabularyQuery($id: ID!) {
-    vocabulary(id: $id) {
-        id
-        words
-    }
-}
-
-
 mutation ApplyHostapd($config: String!, $enable: Boolean!) {
     applyHostapd(config: $config, enable: $enable) {
         ...HostapdFragment

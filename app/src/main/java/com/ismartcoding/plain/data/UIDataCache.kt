@@ -1,24 +1,26 @@
 package com.ismartcoding.plain.data
 
-import com.ismartcoding.lib.helpers.JsonHelper
 import com.ismartcoding.lib.helpers.JsonHelper.jsonDecode
 import com.ismartcoding.plain.InitQuery
 import com.ismartcoding.plain.NetworkQuery
 import com.ismartcoding.plain.TempData
-import com.ismartcoding.plain.VocabulariesQuery
-import com.ismartcoding.plain.enums.ConfigType
 import com.ismartcoding.plain.db.DBox
+import com.ismartcoding.plain.enums.ConfigType
 import com.ismartcoding.plain.extensions.toRoute
 import com.ismartcoding.plain.extensions.toRule
-import com.ismartcoding.plain.features.DExchangeRates
 import com.ismartcoding.plain.features.route.Route
 import com.ismartcoding.plain.features.route.getMessage
 import com.ismartcoding.plain.features.route.getTitle
 import com.ismartcoding.plain.features.rule.Rule
 import com.ismartcoding.plain.features.wireguard.WireGuard
 import com.ismartcoding.plain.features.wireguard.toWireGuard
-import com.ismartcoding.plain.fragment.*
-import kotlinx.serialization.json.Json
+import com.ismartcoding.plain.fragment.ConfigFragment
+import com.ismartcoding.plain.fragment.DeviceFragment
+import com.ismartcoding.plain.fragment.HostapdFragment
+import com.ismartcoding.plain.fragment.InterfaceFragment
+import com.ismartcoding.plain.fragment.NetworkConfigFragment
+import com.ismartcoding.plain.fragment.NetworkFragment
+import com.ismartcoding.plain.fragment.NetworkInfoFragment
 
 class UIDataCache {
     var box: DBox? = null
@@ -32,8 +34,6 @@ class UIDataCache {
     var networks: MutableList<NetworkFragment>? = null
     var interfaces: MutableList<InterfaceFragment>? = null
     var networkConfig: NetworkConfigFragment? = null
-    var latestExchangeRates: DExchangeRates? = null
-    var vocabularies: List<VocabulariesQuery.Vocabulary>? = null
     var hostapd: HostapdFragment? = null
     var wireGuards: MutableList<WireGuard>? = null
     var bluetooth: InitQuery.Bluetooth? = null

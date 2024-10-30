@@ -51,17 +51,17 @@ class VideosViewModel(private val savedStateHandle: SavedStateHandle) :
     override val queryText = mutableStateOf("")
 
     suspend fun moreAsync(context: Context, tagsViewModel: TagsViewModel) {
-        offset.value += limit.value
-        val items = VideoMediaStoreHelper.searchAsync(context, getQuery(), limit.value, offset.value, sortBy.value)
+        offset.value += limit.intValue
+        val items = VideoMediaStoreHelper.searchAsync(context, getQuery(), limit.intValue, offset.intValue, sortBy.value)
         _itemsFlow.value.addAll(items)
         tagsViewModel.loadMoreAsync(items.map { it.id }.toSet())
         showLoading.value = false
-        noMore.value = items.size < limit.value
+        noMore.value = items.size < limit.intValue
     }
 
     suspend fun loadAsync(context: Context, tagsViewModel: TagsViewModel) {
-        offset.value = 0
-        _itemsFlow.value = VideoMediaStoreHelper.searchAsync(context, getQuery(), limit.value, offset.value, sortBy.value).toMutableStateList()
+        offset.intValue = 0
+        _itemsFlow.value = VideoMediaStoreHelper.searchAsync(context, getQuery(), limit.intValue, offset.intValue, sortBy.value).toMutableStateList()
         refreshTabsAsync(context, tagsViewModel)
         showLoading.value = false
     }
@@ -69,10 +69,10 @@ class VideosViewModel(private val savedStateHandle: SavedStateHandle) :
     // for updating tags, delete items
     suspend fun refreshTabsAsync(context: Context, tagsViewModel: TagsViewModel) {
         tagsViewModel.loadAsync(_itemsFlow.value.map { it.id }.toSet())
-        total.value = VideoMediaStoreHelper.countAsync(context, getTotalQuery())
-        noMore.value = _itemsFlow.value.size < limit.value
+        total.intValue = VideoMediaStoreHelper.countAsync(context, getTotalQuery())
+        noMore.value = _itemsFlow.value.size < limit.intValue
         tabs.value = listOf(
-            VTabData(LocaleHelper.getString(R.string.all), "all", total.value),
+            VTabData(LocaleHelper.getString(R.string.all), "all", total.intValue),
             * tagsViewModel.itemsFlow.value.map { VTabData(it.name, it.id, it.count) }.toTypedArray()
         )
     }

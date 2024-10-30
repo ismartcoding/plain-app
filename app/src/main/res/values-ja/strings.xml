@@ -315,8 +315,6 @@
     <string name="routes">ルート</string>
     <string name="create_route">ルートを作成</string>
     <string name="edit_route">ルートを編集</string>
-    <string name="create_vocabulary">用語を作成</string>
-    <string name="edit_vocabulary">用語を編集</string>
     <string name="add">追加</string>
     <string name="import_opml_file">OPMLからインポート</string>
     <string name="export_opml_file">OPMLにエクスポート</string>
@@ -411,13 +409,6 @@
     <string name="template">テンプレート</string>
     <string name="sort_by_random">ランダムに並べ替え</string>
     <string name="select_a_template">テンプレートを選択</string>
-    <string name="vocabulary_cet4">CET-4 単語</string>
-    <string name="vocabulary_cet6">CET-6 単語</string>
-    <string name="vocabulary_chuzhong">中学校の単語</string>
-    <string name="vocabulary_gaozhong">高校の単語</string>
-    <string name="vocabulary_xiaoxue">小学校の単語</string>
-    <string name="vocabulary_kaoyan">博士課程の単語</string>
-    <string name="vocabulary_none">空のリスト</string>
     <string name="edit">編集</string>
     <string name="preview">プレビュー</string>
     <string name="edit_mode">編集モード</string>

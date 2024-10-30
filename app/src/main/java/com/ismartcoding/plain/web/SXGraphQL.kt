@@ -87,7 +87,6 @@ import com.ismartcoding.plain.features.media.FileMediaStoreHelper
 import com.ismartcoding.plain.features.media.VideoMediaStoreHelper
 import com.ismartcoding.plain.helpers.AppHelper
 import com.ismartcoding.plain.helpers.DeviceInfoHelper
-import com.ismartcoding.plain.helpers.ExchangeHelper
 import com.ismartcoding.plain.helpers.FileHelper
 import com.ismartcoding.plain.helpers.QueryHelper
 import com.ismartcoding.plain.helpers.TempHelper
@@ -136,6 +135,7 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCallPipeline
 import io.ktor.server.application.BaseApplicationPlugin
 import io.ktor.server.application.call
+import io.ktor.server.application.plugin
 import io.ktor.server.application.pluginOrNull
 import io.ktor.server.request.header
 import io.ktor.server.request.receive
@@ -146,6 +146,7 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
+import io.ktor.server.routing.routing
 import io.ktor.util.AttributeKey
 import kotlinx.coroutines.coroutineScope
 import kotlinx.datetime.Instant
@@ -667,14 +668,6 @@ class SXGraphQL(val schema: Schema) {
                     resolver { id: ID ->
                         val data = NoteHelper.getById(id.value)
                         data?.toModel()
-                    }
-                }
-                query("latestExchangeRates") {
-                    resolver { live: Boolean ->
-                        if (live || UIDataCache.current().latestExchangeRates == null) {
-                            ExchangeHelper.getRates()
-                        }
-                        UIDataCache.current().latestExchangeRates?.toModel()
                     }
                 }
                 query("deviceInfo") {
@@ -1358,7 +1351,7 @@ class SXGraphQL(val schema: Schema) {
                 enum<Permission>()
                 enum<FileSortBy>()
                 stringScalar<Instant> {
-                    deserialize = { value: String -> value.toInstant() }
+                    deserialize = { value: String -> Instant.parse(value) }
                     serialize = Instant::toString
                 }
 
@@ -1398,7 +1391,7 @@ class SXGraphQL(val schema: Schema) {
                     config.schemaBlock?.invoke(this)
                 }
 
-            val routing: Routing.() -> Unit = {
+            pipeline.routing {
                 route("/graphql") {
                     post {
                         if (!TempData.webEnabled) {
@@ -1448,8 +1441,6 @@ class SXGraphQL(val schema: Schema) {
                     }
                 }
             }
-
-            pipeline.pluginOrNull(Routing)?.apply(routing)
 
             pipeline.intercept(ApplicationCallPipeline.Monitoring) {
                 try {

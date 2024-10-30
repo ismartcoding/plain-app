@@ -65,11 +65,10 @@ import com.ismartcoding.plain.ui.base.PTopAppBar
 import com.ismartcoding.plain.ui.base.Subtitle
 import com.ismartcoding.plain.ui.base.TopSpace
 import com.ismartcoding.plain.ui.components.ColorPickerDialog
-import com.ismartcoding.plain.ui.nav.navigate
 import com.ismartcoding.plain.ui.helpers.DialogHelper
-import com.ismartcoding.plain.ui.nav.RouteName
 import com.ismartcoding.plain.ui.base.svg.PALETTE
 import com.ismartcoding.plain.ui.base.svg.SVGString
+import com.ismartcoding.plain.ui.nav.Routing
 import com.ismartcoding.plain.ui.theme.PlainTheme
 import com.ismartcoding.plain.ui.theme.cardContainer
 import com.ismartcoding.plain.ui.theme.palette.TonalPalettes
@@ -171,7 +170,7 @@ fun ColorAndStylePage(navController: NavHostController) {
                     )
                     PListItem(
                         modifier = PlainTheme.getCardModifier().clickable {
-                            navController.navigate(RouteName.DARK_THEME)
+                            navController.navigate(Routing.DarkTheme)
                         },
                         title = stringResource(R.string.dark_theme),
                         desc = DarkTheme.entries.find { it.value == darkTheme }?.getText(context) ?: "",

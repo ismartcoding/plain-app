@@ -19,10 +19,9 @@ import com.ismartcoding.plain.ui.base.PListItem
 import com.ismartcoding.plain.ui.base.PMainSwitch
 import com.ismartcoding.plain.ui.base.VerticalSpace
 import com.ismartcoding.plain.ui.components.WebAddress
-import com.ismartcoding.plain.ui.nav.navigate
 import com.ismartcoding.plain.ui.models.MainViewModel
 import com.ismartcoding.plain.ui.models.VClickText
-import com.ismartcoding.plain.ui.nav.RouteName
+import com.ismartcoding.plain.ui.nav.Routing
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -37,7 +36,7 @@ fun HomeWeb(
     PCard {
         PListItem(
             modifier = Modifier.clickable {
-                navController.navigate(RouteName.WEB_SETTINGS)
+                navController.navigate(Routing.WebSettings)
             },
             title = stringResource(R.string.web_console),
             showMore = true,
@@ -47,7 +46,7 @@ fun HomeWeb(
             text = fullText,
             clickTexts = listOf(
                 VClickText(learnMore) {
-                    navController.navigate(RouteName.WEB_LEARN_MORE)
+                    navController.navigate(Routing.WebLearnMore)
                 }
             ),
             modifier = Modifier

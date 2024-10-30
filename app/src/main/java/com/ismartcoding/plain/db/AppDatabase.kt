@@ -13,13 +13,13 @@ import com.ismartcoding.plain.MainApp
 
 @Database(
     entities = [
-        DChat::class, DBox::class, DVocabulary::class, DSession::class, DTag::class, DTagRelation::class,
+        DChat::class, DBox::class, DSession::class, DTag::class, DTagRelation::class,
         DNote::class, DFeed::class, DFeedEntry::class, DBook::class, DBookChapter::class, DAIChat::class,
     ],
-    version = 1,
-//    autoMigrations = [
-//        AutoMigration (from = 1, to = 2, spec = AppDatabase.AutoMigration1To2::class)
-//    ],
+    version = 2,
+    autoMigrations = [
+        AutoMigration (from = 1, to = 2, spec = AppDatabase.AutoMigration1To2::class)
+    ],
     exportSchema = true,
 )
 @TypeConverters(DateConverter::class, StringListConverter::class, ChatItemContentConverter::class)
@@ -27,8 +27,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun chatDao(): ChatDao
 
     abstract fun boxDao(): BoxDao
-
-    abstract fun vocabularyDao(): VocabularyDao
 
     abstract fun sessionDao(): SessionDao
 

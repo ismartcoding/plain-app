@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -77,12 +78,11 @@ import com.ismartcoding.plain.ui.base.Tips
 import com.ismartcoding.plain.ui.base.TopSpace
 import com.ismartcoding.plain.ui.base.VerticalSpace
 import com.ismartcoding.plain.ui.components.WebAddress
-import com.ismartcoding.plain.ui.nav.navigate
 import com.ismartcoding.plain.ui.helpers.DialogHelper
 import com.ismartcoding.plain.ui.models.MainViewModel
 import com.ismartcoding.plain.ui.models.VClickText
 import com.ismartcoding.plain.ui.models.WebConsoleViewModel
-import com.ismartcoding.plain.ui.nav.RouteName
+import com.ismartcoding.plain.ui.nav.Routing
 import com.ismartcoding.plain.ui.theme.PlainTheme
 import com.ismartcoding.plain.web.HttpServerManager
 import kotlinx.coroutines.Dispatchers
@@ -107,7 +107,7 @@ fun WebSettingsPage(
         var shouldIgnoreOptimize by remember { mutableStateOf(!powerManager.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID)) }
         var systemAlertWindow by remember { mutableStateOf(Permission.SYSTEM_ALERT_WINDOW.can(context)) }
         var isVPNConnected by remember { mutableStateOf(NetworkHelper.isVPNConnected(context)) }
-        val events by remember { mutableStateOf<MutableList<Job>>(arrayListOf()) }
+        val events = remember { mutableStateListOf<Job>() }
 
         val learnMore = stringResource(id = R.string.learn_more)
         val fullText = (stringResource(id = R.string.web_console_desc) + " " + learnMore)
@@ -169,7 +169,7 @@ fun WebSettingsPage(
                     PMiniOutlineButton(
                         text = stringResource(R.string.sessions),
                         onClick = {
-                            navController.navigate(RouteName.SESSIONS)
+                            navController.navigate(Routing.Sessions)
                         },
                     )
                     ActionButtonMoreWithMenu { dismiss ->
@@ -180,7 +180,7 @@ fun WebSettingsPage(
                             )
                         }, onClick = {
                             dismiss()
-                            navController.navigate(RouteName.WEB_SECURITY)
+                            navController.navigate(Routing.WebSecurity)
                         }, text = {
                             Text(text = stringResource(R.string.security))
                         })
@@ -191,7 +191,7 @@ fun WebSettingsPage(
                             )
                         }, onClick = {
                             dismiss()
-                            navController.navigate(RouteName.WEB_DEV)
+                            navController.navigate(Routing.WebDev)
                         }, text = {
                             Text(text = stringResource(R.string.testing_token))
                         })
@@ -258,7 +258,7 @@ fun WebSettingsPage(
                         text = fullText,
                         clickTexts = listOf(
                             VClickText(learnMore) {
-                                navController.navigate(RouteName.WEB_LEARN_MORE)
+                                navController.navigate(Routing.WebLearnMore)
                             }
                         ),
                         modifier = Modifier

@@ -58,6 +58,7 @@ import com.ismartcoding.plain.enums.HttpServerState
 import com.ismartcoding.plain.enums.Language
 import com.ismartcoding.plain.enums.PickFileTag
 import com.ismartcoding.plain.enums.PickFileType
+import com.ismartcoding.plain.features.AudioPlayer
 import com.ismartcoding.plain.features.ChatHelper
 import com.ismartcoding.plain.features.ConfirmToAcceptLoginEvent
 import com.ismartcoding.plain.features.ExportFileEvent
@@ -65,7 +66,6 @@ import com.ismartcoding.plain.features.ExportFileResultEvent
 import com.ismartcoding.plain.features.HttpServerStateChangedEvent
 import com.ismartcoding.plain.features.IgnoreBatteryOptimizationEvent
 import com.ismartcoding.plain.features.IgnoreBatteryOptimizationResultEvent
-import com.ismartcoding.plain.features.PackageHelper
 import com.ismartcoding.plain.features.Permission
 import com.ismartcoding.plain.features.Permissions
 import com.ismartcoding.plain.features.PermissionsResultEvent
@@ -75,7 +75,6 @@ import com.ismartcoding.plain.features.RequestPermissionsEvent
 import com.ismartcoding.plain.features.RestartAppEvent
 import com.ismartcoding.plain.features.StartScreenMirrorEvent
 import com.ismartcoding.plain.features.WindowFocusChangedEvent
-import com.ismartcoding.plain.features.AudioPlayer
 import com.ismartcoding.plain.features.bluetooth.BluetoothPermission
 import com.ismartcoding.plain.features.locale.LocaleHelper
 import com.ismartcoding.plain.features.locale.LocaleHelper.getStringF
@@ -93,14 +92,13 @@ import com.ismartcoding.plain.receivers.PlugInControlReceiver
 import com.ismartcoding.plain.services.PNotificationListenerService
 import com.ismartcoding.plain.services.ScreenMirrorService
 import com.ismartcoding.plain.ui.audio.AudioPlayerDialog
-import com.ismartcoding.plain.ui.nav.navigate
-import com.ismartcoding.plain.ui.nav.navigatePdf
 import com.ismartcoding.plain.ui.helpers.DialogHelper
 import com.ismartcoding.plain.ui.helpers.FilePickHelper
 import com.ismartcoding.plain.ui.helpers.WebHelper
 import com.ismartcoding.plain.ui.models.MainViewModel
+import com.ismartcoding.plain.ui.nav.Routing
+import com.ismartcoding.plain.ui.nav.navigatePdf
 import com.ismartcoding.plain.ui.page.Main
-import com.ismartcoding.plain.ui.nav.RouteName
 import com.ismartcoding.plain.web.HttpServerManager
 import com.ismartcoding.plain.web.models.toModel
 import com.ismartcoding.plain.web.websocket.EventType
@@ -490,7 +488,7 @@ class MainActivity : AppCompatActivity() {
                             ),
                         ),
                     )
-                    navControllerState.value?.navigate(RouteName.CHAT)
+                    navControllerState.value?.navigate(Routing.Chat)
                 }
                 return
             }
@@ -498,7 +496,7 @@ class MainActivity : AppCompatActivity() {
             val uri = intent.parcelable(Intent.EXTRA_STREAM) as? Uri ?: return
             DialogHelper.showConfirmDialog("", LocaleHelper.getString(R.string.confirm_to_send_file_to_file_assistant),
                 confirmButton = LocaleHelper.getString(R.string.ok) to {
-                    navControllerState.value?.navigate(RouteName.CHAT)
+                    navControllerState.value?.navigate(Routing.Chat)
                     coIO {
                         delay(1000)
                         sendEvent(PickFileResultEvent(PickFileTag.SEND_MESSAGE, PickFileType.FILE, setOf(uri)))
@@ -510,7 +508,7 @@ class MainActivity : AppCompatActivity() {
                 confirmButton = LocaleHelper.getString(R.string.ok) to {
                     val uris = intent.parcelableArrayList<Uri>(Intent.EXTRA_STREAM)
                     if (uris != null) {
-                        navControllerState.value?.navigate(RouteName.CHAT)
+                        navControllerState.value?.navigate(Routing.Chat)
                         coIO {
                             delay(1000)
                             sendEvent(PickFileResultEvent(PickFileTag.SEND_MESSAGE, PickFileType.FILE, uris.toSet()))

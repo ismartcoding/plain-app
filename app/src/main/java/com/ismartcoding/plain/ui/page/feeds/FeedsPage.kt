@@ -24,6 +24,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -76,7 +77,7 @@ import com.ismartcoding.plain.ui.models.select
 import com.ismartcoding.plain.ui.models.showBottomActions
 import com.ismartcoding.plain.ui.models.toggleSelectAll
 import com.ismartcoding.plain.ui.models.toggleSelectMode
-import com.ismartcoding.plain.ui.nav.RouteName
+import com.ismartcoding.plain.ui.nav.Routing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -94,7 +95,7 @@ fun FeedsPage(
     val window = (view.context as Activity).window
     val itemsState by viewModel.itemsFlow.collectAsState()
     val scope = rememberCoroutineScope()
-    val events by remember { mutableStateOf<MutableList<Job>>(arrayListOf()) }
+    val events = remember { mutableStateListOf<Job>() }
 
     val topRefreshLayoutState =
         rememberRefreshLayoutState {
@@ -284,7 +285,7 @@ fun FeedsPage(
                                     if (viewModel.selectMode.value) {
                                         viewModel.select(m.id)
                                     } else {
-                                        navController.navigate("${RouteName.FEED_ENTRIES.name}?feedId=${m.id}")
+                                        navController.navigate(Routing.FeedEntries(m.id))
                                     }
                                 },
                                 onLongClick = {

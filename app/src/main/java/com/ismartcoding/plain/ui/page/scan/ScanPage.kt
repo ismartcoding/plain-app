@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -79,9 +80,8 @@ import com.ismartcoding.plain.ui.base.PScaffold
 import com.ismartcoding.plain.ui.base.PTopAppBar
 import com.ismartcoding.plain.ui.base.TextCard
 import com.ismartcoding.plain.ui.base.TopSpace
-import com.ismartcoding.plain.ui.nav.navigate
 import com.ismartcoding.plain.ui.helpers.DialogHelper
-import com.ismartcoding.plain.ui.nav.RouteName
+import com.ismartcoding.plain.ui.nav.Routing
 import com.ismartcoding.plain.ui.theme.darkMask
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -97,7 +97,7 @@ fun ScanPage(navController: NavHostController) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
     var cameraProvider: ProcessCameraProvider? = null
-    val events by remember { mutableStateOf<MutableList<Job>>(arrayListOf()) }
+    val events = remember { mutableStateListOf<Job>() }
     var cameraDetecting by remember { mutableStateOf(true) }
     var hasCamPermission by remember {
         mutableStateOf(Permission.CAMERA.can(context))
@@ -182,7 +182,7 @@ fun ScanPage(navController: NavHostController) {
                         contentDescription = stringResource(R.string.scan_history),
                         tint = MaterialTheme.colorScheme.onSurface,
                     ) {
-                        navController.navigate(RouteName.SCAN_HISTORY)
+                        navController.navigate(Routing.ScanHistory)
                     }
                 },
             )

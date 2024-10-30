@@ -315,8 +315,6 @@
     <string name="routes">Itinéraires</string>
     <string name="create_route">Créer un itinéraire</string>
     <string name="edit_route">Modifier l\'itinéraire</string>
-    <string name="create_vocabulary">Créer un vocabulaire</string>
-    <string name="edit_vocabulary">Modifier le vocabulaire</string>
     <string name="add">Ajouter</string>
     <string name="import_opml_file">Importer depuis OPML</string>
     <string name="export_opml_file">Exporter vers OPML</string>
@@ -411,13 +409,6 @@
     <string name="template">Modèle</string>
     <string name="sort_by_random">Trier au hasard</string>
     <string name="select_a_template">Sélectionnez un modèle</string>
-    <string name="vocabulary_cet4">Vocabulaire CET-4</string>
-    <string name="vocabulary_cet6">Vocabulaire CET-6</string>
-    <string name="vocabulary_chuzhong">Vocabulaire du collège</string>
-    <string name="vocabulary_gaozhong">Vocabulaire du lycée</string>
-    <string name="vocabulary_xiaoxue">Vocabulaire de l\'école primaire</string>
-    <string name="vocabulary_kaoyan">Vocabulaire des études supérieures</string>
-    <string name="vocabulary_none">Liste vide</string>
     <string name="edit">Modifier</string>
     <string name="preview">Aperçu</string>
     <string name="edit_mode">Mode édition</string>
@@ -439,7 +430,7 @@
     <string name="srl_header_secondary">Relâcher pour le deuxième étage</string>
     <string name="hide_word">Masquer le mot</string>
     <string name="show_word">Afficher le mot</string>
-    <string name="hide_translation">Masquer la traduction</string>e
+    <string name="hide_translation">Masquer la traduction</string>
     <string name="show_translation">Afficher la traduction</string>
     <string name="unselect">Désélectionner</string>
     <string name="select_first">Veuillez d\'abord sélectionner</string>

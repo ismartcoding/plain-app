@@ -85,7 +85,7 @@ import com.ismartcoding.plain.ui.models.select
 import com.ismartcoding.plain.ui.models.showBottomActions
 import com.ismartcoding.plain.ui.models.toggleSelectAll
 import com.ismartcoding.plain.ui.models.toggleSelectMode
-import com.ismartcoding.plain.ui.nav.RouteName
+import com.ismartcoding.plain.ui.nav.Routing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -291,7 +291,7 @@ fun NotesPage(
                 PDraggableElement {
                     FloatingActionButton(
                         onClick = {
-                            navController.navigate("${RouteName.NOTES.name}/create?tagId=${viewModel.tag.value?.id ?: ""}")
+                            navController.navigate(Routing.NotesCreate(viewModel.tag.value?.id ?: ""))
                         },
                     ) {
                         Icon(
@@ -366,7 +366,7 @@ fun NotesPage(
                                             if (viewModel.selectMode.value) {
                                                 viewModel.select(m.id)
                                             } else {
-                                                navController.navigate("${RouteName.NOTES.name}/${m.id}")
+                                                navController.navigate(Routing.NoteDetail(m.id))
                                             }
                                         },
                                         onLongClick = {

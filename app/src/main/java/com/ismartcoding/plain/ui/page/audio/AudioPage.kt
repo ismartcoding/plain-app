@@ -25,6 +25,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -98,7 +99,7 @@ fun AudioPage(
     var hasPermission by remember {
         mutableStateOf(AppFeatureType.FILES.hasPermission(context))
     }
-    val events by remember { mutableStateOf<MutableList<Job>>(arrayListOf()) }
+    val events = remember { mutableStateListOf<Job>() }
 
     val topRefreshLayoutState =
         rememberRefreshLayoutState {
@@ -243,7 +244,7 @@ fun AudioPage(
                             viewModel.loadAsync(context, tagsViewModel)
                         }
                     },
-                    label = { Text(stringResource(id = R.string.all) + " (${viewModel.total.value})") }
+                    label = { Text(stringResource(id = R.string.all) + " (${viewModel.total.intValue})") }
                 )
                 tagsState.forEach { tag ->
                     PFilterChip(

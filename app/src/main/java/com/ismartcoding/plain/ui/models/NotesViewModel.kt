@@ -44,8 +44,8 @@ class NotesViewModel(private val savedStateHandle: SavedStateHandle) : ISearchab
     override val selectedIds = mutableStateListOf<String>()
 
     suspend fun moreAsync(tagsViewModel: TagsViewModel) {
-        offset.value += limit.value
-        val items = NoteHelper.search(getQuery(), limit.value, offset.value)
+        offset.value += limit.intValue
+        val items = NoteHelper.search(getQuery(), limit.intValue, offset.intValue)
         _itemsFlow.update {
             val mutableList = it.toMutableStateList()
             mutableList.addAll(items)
@@ -53,24 +53,24 @@ class NotesViewModel(private val savedStateHandle: SavedStateHandle) : ISearchab
         }
         tagsViewModel.loadMoreAsync(items.map { it.id }.toSet())
         showLoading.value = false
-        noMore.value = items.size < limit.value
+        noMore.value = items.size < limit.intValue
     }
 
     suspend fun loadAsync(tagsViewModel: TagsViewModel) {
-        offset.value = 0
+        offset.intValue = 0
         val query = getQuery()
-        _itemsFlow.value = NoteHelper.search(query, limit.value, offset.value).toMutableStateList()
+        _itemsFlow.value = NoteHelper.search(query, limit.intValue, offset.intValue).toMutableStateList()
         refreshTabsAsync(tagsViewModel)
-        noMore.value = _itemsFlow.value.size < limit.value
+        noMore.value = _itemsFlow.value.size < limit.intValue
         showLoading.value = false
     }
 
     suspend fun refreshTabsAsync(tagsViewModel: TagsViewModel) {
         tagsViewModel.loadAsync(_itemsFlow.value.map { it.id }.toSet())
-        total.value = NoteHelper.count(getTotalQuery())
-        totalTrash.value = NoteHelper.count(getTrashQuery())
+        total.intValue = NoteHelper.count(getTotalQuery())
+        totalTrash.intValue = NoteHelper.count(getTrashQuery())
         tabs.value = listOf(
-            VTabData(LocaleHelper.getString(R.string.all), "all", total.value),
+            VTabData(LocaleHelper.getString(R.string.all), "all", total.intValue),
             VTabData(LocaleHelper.getString(R.string.trash), "trash", totalTrash.value),
             * tagsViewModel.itemsFlow.value.map { VTabData(it.name, it.id, it.count) }.toTypedArray()
         )

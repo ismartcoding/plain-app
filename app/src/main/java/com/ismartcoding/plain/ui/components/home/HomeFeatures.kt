@@ -22,10 +22,9 @@ import com.ismartcoding.plain.enums.AppFeatureType
 import com.ismartcoding.plain.ui.audio.AudiosDialog
 import com.ismartcoding.plain.ui.base.PCard
 import com.ismartcoding.plain.ui.base.PIconTextButton
-import com.ismartcoding.plain.ui.nav.navigate
 import com.ismartcoding.plain.ui.nav.navigateImages
 import com.ismartcoding.plain.ui.file.FilesDialog
-import com.ismartcoding.plain.ui.nav.RouteName
+import com.ismartcoding.plain.ui.nav.Routing
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -61,14 +60,14 @@ fun HomeFeatures(
                 stringResource(id = R.string.videos),
                 modifier = Modifier.width(itemWidth),
             ) {
-                navController.navigate(RouteName.VIDEOS)
+                navController.navigate(Routing.Videos(""))
             }
             PIconTextButton(
                 icon = Icons.AutoMirrored.Outlined.Article,
                 stringResource(id = R.string.docs),
                 modifier = Modifier.width(itemWidth),
             ) {
-                navController.navigate(RouteName.DOCS)
+                navController.navigate(Routing.Docs)
             }
             PIconTextButton(
                 icon = Icons.Outlined.FilePresent,
@@ -83,7 +82,7 @@ fun HomeFeatures(
                     stringResource(id = R.string.apps),
                     modifier = Modifier.width(itemWidth),
                 ) {
-                    navController.navigate(RouteName.APPS)
+                    navController.navigate(Routing.Apps)
                 }
             }
             PIconTextButton(
@@ -91,21 +90,21 @@ fun HomeFeatures(
                 stringResource(id = R.string.notes),
                 modifier = Modifier.width(itemWidth),
             ) {
-                navController.navigate(RouteName.NOTES)
+                navController.navigate(Routing.Notes)
             }
             PIconTextButton(
                 icon = Icons.Outlined.RssFeed,
                 stringResource(id = R.string.feeds),
                 modifier = Modifier.width(itemWidth),
             ) {
-                navController.navigate(RouteName.FEED_ENTRIES)
+                navController.navigate(Routing.FeedEntries(""))
             }
             PIconTextButton(
                 icon = Icons.Outlined.GraphicEq,
                 stringResource(id = R.string.sound_meter),
                 modifier = Modifier.width(itemWidth),
             ) {
-                navController.navigate(RouteName.SOUND_METER)
+                navController.navigate(Routing.SoundMeter)
             }
 //                if (AppFeatureType.EXCHANGE_RATE.has()) {
 //                    PIconTextButton(

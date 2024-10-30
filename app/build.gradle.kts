@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.config.KotlinCompilerVersion
 import java.io.FileInputStream
 import java.util.Properties
 import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
@@ -7,13 +6,14 @@ plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    id("com.apollographql.apollo3") version "3.2.1"
+    id("com.apollographql.apollo3") version libs.versions.apollo
     id("kotlin-parcelize")
     id("androidx.room")
     id("com.google.devtools.ksp")
     kotlin("android")
     kotlin("kapt")
-    kotlin("plugin.serialization") version "1.9.23"
+    kotlin("plugin.serialization") version libs.versions.kotlin
+    alias(libs.plugins.compose.compiler)
 }
 
 room {
@@ -28,11 +28,10 @@ rootProject.file("keystore.properties").let {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.ismartcoding.plain"
         minSdk = 28
-        targetSdk = 34
 
         val abiFilterList = if (hasProperty("abiFilters")) property("abiFilters").toString().split(';') else listOf()
         val singleAbiNum =
@@ -128,10 +127,6 @@ android {
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.12"
-    }
-
     packaging {
         jniLibs {
             // useLegacyPackaging = true
@@ -144,8 +139,10 @@ android {
     namespace = "com.ismartcoding.plain"
 
     apollo {
-        packageName.set("com.ismartcoding.plain")
-        mapScalar("Time", "java.util.Date")
+        service("service") {
+            packageName.set("com.ismartcoding.plain")
+            mapScalar("Time", "java.util.Date")
+        }
     }
 
     kotlinOptions {
@@ -218,7 +215,7 @@ dependencies {
 
     // https://developer.android.com/jetpack/androidx/releases/room
     implementation(libs.room.runtime)
-    annotationProcessor(libs.room.compiler)
+//    annotationProcessor(libs.room.compiler)
     ksp(libs.room.compiler)
 
     implementation(libs.openai.client)
@@ -243,5 +240,5 @@ dependencies {
     implementation(libs.zt.zip)
     implementation(project(":lib"))
     debugImplementation(libs.leakcanary.android)
-    implementation(kotlin("stdlib", KotlinCompilerVersion.VERSION))
+    implementation(kotlin("stdlib", libs.versions.kotlin.get()))
 }

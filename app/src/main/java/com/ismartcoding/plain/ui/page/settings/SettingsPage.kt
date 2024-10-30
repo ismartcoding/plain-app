@@ -38,9 +38,8 @@ import com.ismartcoding.plain.ui.base.PSwitch
 import com.ismartcoding.plain.ui.base.PTopAppBar
 import com.ismartcoding.plain.ui.base.TopSpace
 import com.ismartcoding.plain.ui.base.VerticalSpace
-import com.ismartcoding.plain.ui.nav.navigate
 import com.ismartcoding.plain.ui.models.UpdateViewModel
-import com.ismartcoding.plain.ui.nav.RouteName
+import com.ismartcoding.plain.ui.nav.Routing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,7 +78,7 @@ fun SettingsPage(navController: NavHostController, updateViewModel: UpdateViewMo
                     PCard {
                         PListItem(
                             modifier = Modifier.clickable {
-                                navController.navigate(RouteName.COLOR_AND_STYLE)
+                                navController.navigate(Routing.ColorAndStyle)
                             },
                             title = stringResource(R.string.color_and_style),
                             desc = stringResource(R.string.color_and_style_desc),
@@ -88,7 +87,7 @@ fun SettingsPage(navController: NavHostController, updateViewModel: UpdateViewMo
                         )
                         PListItem(
                             modifier = Modifier.clickable {
-                                navController.navigate(RouteName.LANGUAGE)
+                                navController.navigate(Routing.Language)
                             },
                             title = stringResource(R.string.language),
                             desc = stringResource(R.string.language_desc),
@@ -100,7 +99,7 @@ fun SettingsPage(navController: NavHostController, updateViewModel: UpdateViewMo
                     PCard {
                         PListItem(
                             modifier = Modifier.clickable {
-                                navController.navigate(RouteName.BACKUP_RESTORE)
+                                navController.navigate(Routing.BackupRestore)
                             },
                             title = stringResource(R.string.backup_restore),
                             desc = stringResource(R.string.backup_desc),
@@ -109,7 +108,7 @@ fun SettingsPage(navController: NavHostController, updateViewModel: UpdateViewMo
                         )
                         PListItem(
                             modifier = Modifier.clickable {
-                                navController.navigate(RouteName.ABOUT)
+                                navController.navigate(Routing.About)
                             },
                             title = stringResource(R.string.about),
                             desc = stringResource(R.string.about_desc),

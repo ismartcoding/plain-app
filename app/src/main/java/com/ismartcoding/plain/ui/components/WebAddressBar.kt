@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -80,7 +81,7 @@ fun WebAddressBar(
     val showContextMenu = remember { mutableStateOf(false) }
     val defaultUrl = remember { mutableStateOf("${if (isHttps) "https" else "http"}://$ip4:${port}") }
     val scope = rememberCoroutineScope()
-    val events by remember { mutableStateOf<MutableList<Job>>(arrayListOf()) }
+    val events = remember { mutableStateListOf<Job>() }
 
     LaunchedEffect(Unit) {
         events.add(

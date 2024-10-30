@@ -315,8 +315,6 @@
     <string name="routes">பாதைகள்</string>
     <string name="create_route">பாதை உருவாக்கு</string>
     <string name="edit_route">பாதை திருத்து</string>
-    <string name="create_vocabulary">சொற்களின் அரசியல் உருவாக்கு</string>
-    <string name="edit_vocabulary">சொற்களின் அரசியல் திருத்து</string>
     <string name="add">சேர்க்க</string>
     <string name="import_opml_file">OPML இருப்புக்கு இறக்குமதி செய்</string>
     <string name="export_opml_file">OPML இருப்புக்கு ஏற்றுமதி செய்</string>
@@ -411,13 +409,6 @@
     <string name="template">வார்ப்புரு</string>
     <string name="sort_by_random">புதியாக வரிசைப்படுத்து</string>
     <string name="select_a_template">ஒரு வார்ப்புரு தேர்ந்தெடு</string>
-    <string name="vocabulary_cet4">CET-4 அசைவுச்சொல்</string>
-    <string name="vocabulary_cet6">CET-6 அசைவுச்சொல்</string>
-    <string name="vocabulary_chuzhong">மதிப்பிற்குச் சொல் (ஜூனியர் ஹை ஸ்கூல்)</string>
-    <string name="vocabulary_gaozhong">மதிப்பிற்குச் சொல் (ஹை ஸ்கூல்)</string>
-    <string name="vocabulary_xiaoxue">மதிப்பிற்குச் சொல் (பள்ளி)</string>
-    <string name="vocabulary_kaoyan">மதிப்பிற்குச் சொல் (போஸ்ட் கிரேஜுவேட்)</string>
-    <string name="vocabulary_none">காலியாக</string>
     <string name="edit">திருத்து</string>
     <string name="preview">முன்னோட்டம்</string>
     <string name="edit_mode">திருத்து முறை</string>

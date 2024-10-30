@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,11 +32,10 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.setSingletonImageLoaderFactory
 import com.ismartcoding.lib.channel.receiveEventHandler
@@ -47,6 +47,10 @@ import com.ismartcoding.plain.features.LoadingDialogEvent
 import com.ismartcoding.plain.preference.LocalDarkTheme
 import com.ismartcoding.plain.ui.base.coil.newImageLoader
 import com.ismartcoding.plain.ui.models.MainViewModel
+import com.ismartcoding.plain.ui.models.NotesViewModel
+import com.ismartcoding.plain.ui.models.TagsViewModel
+import com.ismartcoding.plain.ui.nav.Routing
+import com.ismartcoding.plain.ui.nav.sharedViewModel
 import com.ismartcoding.plain.ui.page.apps.AppPage
 import com.ismartcoding.plain.ui.page.apps.AppsPage
 import com.ismartcoding.plain.ui.page.audio.AudioPage
@@ -54,6 +58,8 @@ import com.ismartcoding.plain.ui.page.chat.ChatEditTextPage
 import com.ismartcoding.plain.ui.page.chat.ChatPage
 import com.ismartcoding.plain.ui.page.chat.ChatTextPage
 import com.ismartcoding.plain.ui.page.docs.DocsPage
+import com.ismartcoding.plain.ui.page.feeds.FeedEntriesPage
+import com.ismartcoding.plain.ui.page.feeds.FeedEntryPage
 import com.ismartcoding.plain.ui.page.feeds.FeedSettingsPage
 import com.ismartcoding.plain.ui.page.feeds.FeedsPage
 import com.ismartcoding.plain.ui.page.images.ImagesPage
@@ -69,7 +75,6 @@ import com.ismartcoding.plain.ui.page.settings.DarkThemePage
 import com.ismartcoding.plain.ui.page.settings.LanguagePage
 import com.ismartcoding.plain.ui.page.settings.SettingsPage
 import com.ismartcoding.plain.ui.page.tags.TagsPage
-import com.ismartcoding.plain.ui.page.tools.ExchangeRatePage
 import com.ismartcoding.plain.ui.page.tools.SoundMeterPage
 import com.ismartcoding.plain.ui.page.videos.VideosPage
 import com.ismartcoding.plain.ui.page.web.SessionsPage
@@ -77,10 +82,6 @@ import com.ismartcoding.plain.ui.page.web.WebDevPage
 import com.ismartcoding.plain.ui.page.web.WebLearnMorePage
 import com.ismartcoding.plain.ui.page.web.WebSecurityPage
 import com.ismartcoding.plain.ui.page.web.WebSettingsPage
-import com.ismartcoding.plain.ui.nav.RouteName
-import com.ismartcoding.plain.ui.nav.feedEntriesGraph
-import com.ismartcoding.plain.ui.nav.notesGraph
-import com.ismartcoding.plain.ui.nav.routeDetail
 import com.ismartcoding.plain.ui.theme.AppTheme
 import kotlinx.coroutines.Job
 
@@ -100,7 +101,7 @@ fun Main(navControllerState: MutableState<NavHostController?>, onLaunched: () ->
     var loadingDialogEvent by remember {
         mutableStateOf<LoadingDialogEvent?>(null)
     }
-    val events by remember { mutableStateOf<MutableList<Job>>(arrayListOf()) }
+    val events = remember { mutableStateListOf<Job>() }
 
     LaunchedEffect(Unit) {
         events.add(
@@ -127,77 +128,84 @@ fun Main(navControllerState: MutableState<NavHostController?>, onLaunched: () ->
         NavHost(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface),
             navController = navController,
-            startDestination = RouteName.HOME.name,
+            startDestination = Routing.Home,
         ) {
-            mapOf<RouteName, @Composable () -> Unit>(
-                RouteName.HOME to { HomePage(navController, mainViewModel) },
-                RouteName.SETTINGS to { SettingsPage(navController) },
-                RouteName.COLOR_AND_STYLE to { ColorAndStylePage(navController) },
-                RouteName.DARK_THEME to { DarkThemePage(navController) },
-                RouteName.LANGUAGE to { LanguagePage(navController) },
-                RouteName.BACKUP_RESTORE to { BackupRestorePage(navController) },
-                RouteName.ABOUT to { AboutPage(navController) },
-                RouteName.WEB_SETTINGS to { WebSettingsPage(navController, mainViewModel) },
-                RouteName.SESSIONS to { SessionsPage(navController) },
-                RouteName.WEB_DEV to { WebDevPage(navController) },
-                RouteName.WEB_SECURITY to { WebSecurityPage(navController) },
-                RouteName.EXCHANGE_RATE to { ExchangeRatePage(navController) },
-                RouteName.SOUND_METER to { SoundMeterPage(navController) },
-                RouteName.CHAT to { ChatPage(navController) },
-                RouteName.SCAN_HISTORY to { ScanHistoryPage(navController) },
-                RouteName.SCAN to { ScanPage(navController) },
-                RouteName.APPS to { AppsPage(navController) },
-                RouteName.DOCS to { DocsPage(navController) },
-                RouteName.FEEDS to { FeedsPage(navController) },
-                RouteName.FEED_SETTINGS to { FeedSettingsPage(navController) },
-                RouteName.WEB_LEARN_MORE to { WebLearnMorePage(navController) },
-                RouteName.AUDIO to { AudioPage(navController) },
-            ).forEach { (routeName, content) ->
-                composable(routeName.name) {
-                    content()
-                }
+            composable<Routing.Home> { HomePage(navController, mainViewModel) }
+            composable<Routing.Settings> { SettingsPage(navController) }
+            composable<Routing.ColorAndStyle> { ColorAndStylePage(navController) }
+            composable<Routing.DarkTheme> { DarkThemePage(navController) }
+            composable<Routing.Language> { LanguagePage(navController) }
+            composable<Routing.BackupRestore> { BackupRestorePage(navController) }
+            composable<Routing.About> { AboutPage(navController) }
+            composable<Routing.WebSettings> { WebSettingsPage(navController, mainViewModel) }
+            composable<Routing.Sessions> { SessionsPage(navController) }
+            composable<Routing.WebDev> { WebDevPage(navController) }
+            composable<Routing.WebSecurity> { WebSecurityPage(navController) }
+            composable<Routing.SoundMeter> { SoundMeterPage(navController) }
+            composable<Routing.Chat> { ChatPage(navController) }
+            composable<Routing.ScanHistory> { ScanHistoryPage(navController) }
+            composable<Routing.Scan> { ScanPage(navController) }
+            composable<Routing.Apps> { AppsPage(navController) }
+            composable<Routing.Docs> { DocsPage(navController) }
+            composable<Routing.Feeds> { FeedsPage(navController) }
+            composable<Routing.FeedSettings> { FeedSettingsPage(navController) }
+            composable<Routing.WebLearnMore> { WebLearnMorePage(navController) }
+            composable<Routing.Audio> { AudioPage(navController) }
+            composable<Routing.Notes> { backStackEntry ->
+                val tagsViewModel = backStackEntry.sharedViewModel<TagsViewModel>(navController)
+                val notesViewModel = backStackEntry.sharedViewModel<NotesViewModel>(navController)
+                NotesPage(navController, viewModel = notesViewModel, tagsViewModel = tagsViewModel)
+            }
+            composable<Routing.AppDetails> { backStackEntry ->
+                val r = backStackEntry.toRoute<Routing.AppDetails>()
+                AppPage(navController, r.id)
             }
 
-            routeDetail(RouteName.APPS) { _, id ->
-                AppPage(navController, id)
+            composable<Routing.FeedEntries> { backStackEntry ->
+                val r = backStackEntry.toRoute<Routing.FeedEntries>()
+                val feedId = r.feedId
+                val tagsViewModel = backStackEntry.sharedViewModel<TagsViewModel>(navController)
+                FeedEntriesPage(navController, feedId, tagsViewModel = tagsViewModel)
             }
 
-            feedEntriesGraph(navController)
-            notesGraph(navController)
-
-            composable(
-                "${RouteName.IMAGES.name}?bucketId={bucketId}",
-                arguments = listOf(navArgument("bucketId") {
-                    nullable = true
-                    defaultValue = ""
-                    type = NavType.StringType
-                }),
-            ) {
-                val bucketId = it.arguments?.getString("bucketId") ?: ""
-                ImagesPage(navController, bucketId)
+            composable<Routing.FeedEntry> { backStackEntry ->
+                val tagsViewModel = backStackEntry.sharedViewModel<TagsViewModel>(navController)
+                val r = backStackEntry.toRoute<Routing.FeedEntry>()
+                FeedEntryPage(navController, r.id, tagsViewModel = tagsViewModel)
             }
 
-            composable(
-                "${RouteName.VIDEOS.name}?bucketId={bucketId}",
-                arguments = listOf(navArgument("bucketId") {
-                    nullable = true
-                    defaultValue = ""
-                    type = NavType.StringType
-                }),
-            ) {
-                val bucketId = it.arguments?.getString("bucketId") ?: ""
-                VideosPage(navController, bucketId)
+            composable<Routing.NotesCreate> { backStackEntry ->
+                val tagsViewModel = backStackEntry.sharedViewModel<TagsViewModel>(navController)
+                val notesViewModel = backStackEntry.sharedViewModel<NotesViewModel>(navController)
+                val r = backStackEntry.toRoute<Routing.NotesCreate>()
+                NotePage(navController, "", r.tagId, notesViewModel = notesViewModel, tagsViewModel = tagsViewModel)
             }
 
+            composable<Routing.NoteDetail> { backStackEntry ->
+                val tagsViewModel = backStackEntry.sharedViewModel<TagsViewModel>(navController)
+                val notesViewModel = backStackEntry.sharedViewModel<NotesViewModel>(navController)
+                val r = backStackEntry.toRoute<Routing.NoteDetail>()
+                NotePage(navController, r.id, "", notesViewModel = notesViewModel, tagsViewModel = tagsViewModel)
+            }
 
-            composable(RouteName.TEXT.name) {
+            composable<Routing.Images> { backStackEntry ->
+                val r = backStackEntry.toRoute<Routing.Images>()
+                ImagesPage(navController, r.bucketId)
+            }
+
+            composable<Routing.Videos> { backStackEntry ->
+                val r = backStackEntry.toRoute<Routing.Videos>()
+                VideosPage(navController, r.bucketId)
+            }
+
+            composable<Routing.Text> {
                 val title = navController.previousBackStackEntry?.savedStateHandle?.get("title") ?: ""
                 val content = navController.previousBackStackEntry?.savedStateHandle?.get("content") ?: ""
                 val language = navController.previousBackStackEntry?.savedStateHandle?.get("language") ?: ""
                 TextPage(navController, title, content, language)
             }
 
-            composable(RouteName.TEXT_FILE.name) {
+            composable<Routing.TextFile> {
                 val path = navController.previousBackStackEntry?.savedStateHandle?.get("path") ?: ""
                 val title = navController.previousBackStackEntry?.savedStateHandle?.get("title") ?: ""
                 val type = navController.previousBackStackEntry?.savedStateHandle?.get("type") ?: ""
@@ -205,45 +213,33 @@ fun Main(navControllerState: MutableState<NavHostController?>, onLaunched: () ->
                 TextFilePage(navController, path, title, mediaId, type)
             }
 
-            composable(
-                RouteName.CHAT_TEXT.name
-            ) {
+            composable<Routing.ChatText> {
                 val content = navController.previousBackStackEntry?.savedStateHandle?.get("content") ?: ""
                 ChatTextPage(navController, content)
             }
 
-            composable(
-                "${RouteName.TAGS.name}?dataType={dataType}",
-                arguments = listOf(navArgument("dataType") { type = NavType.IntType }),
-            ) {
-                val dataType = it.arguments?.getInt("dataType") ?: -1
-                TagsPage(navController, DataType.fromInt(dataType))
+            composable<Routing.Tags> { backStackEntry ->
+                val r = backStackEntry.toRoute<Routing.Tags>()
+                TagsPage(navController, DataType.fromInt(r.dataType))
             }
 
-            composable(
-                "${RouteName.MEDIA_FOLDERS.name}?dataType={dataType}",
-                arguments = listOf(navArgument("dataType") { type = NavType.IntType }),
-            ) {
-                val dataType = it.arguments?.getInt("dataType") ?: -1
-                MediaFoldersPage(navController, DataType.fromInt(dataType))
+            composable<Routing.MediaFolders> { backStackEntry ->
+                val r = backStackEntry.toRoute<Routing.MediaFolders>()
+                MediaFoldersPage(navController, DataType.fromInt(r.dataType))
             }
 
-
-            routeDetail(RouteName.CHAT_EDIT_TEXT) { _, id ->
+            composable<Routing.ChatEditText> { backStackEntry ->
                 val content = navController.previousBackStackEntry?.savedStateHandle?.get("content") ?: ""
-                ChatEditTextPage(navController, id, content)
+                val r = backStackEntry.toRoute<Routing.ChatEditText>()
+                ChatEditTextPage(navController, r.id, content)
             }
 
-            composable(
-                RouteName.OTHER_FILE.name,
-            ) {
+            composable<Routing.OtherFile> {
                 val path = navController.previousBackStackEntry?.savedStateHandle?.get("path") ?: ""
                 OtherFilePage(navController, path)
             }
 
-            composable(
-                RouteName.PDF_VIEWER.name,
-            ) {
+            composable<Routing.PdfViewer> {
                 val uri = navController.previousBackStackEntry?.savedStateHandle?.get("uri") as? Uri
                 if (uri != null) {
                     PdfPage(navController, uri)
