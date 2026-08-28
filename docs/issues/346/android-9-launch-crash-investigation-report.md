@@ -5,7 +5,7 @@
 - Issue: https://github.com/plainhub/plain-app/issues/346
 - Repository: https://github.com/plainhub/plain-app
 - Branch/commit tested: `upstream/main` at `43eebc1c3dc88328c27363c8dd01c12b6fbfd898`
-- Pull request: pending
+- Pull request: https://github.com/plainhub/plain-app/pull/349
 
 ## Priority and scope
 
@@ -147,4 +147,4 @@ BUILD SUCCESSFUL in 28s
 - The reporter's Huawei hardware is not available; reproduction uses Android 9's official emulator image and its supported ARM native translation.
 - A secondary no-Bluetooth-hardware debug-emulator failure occurs only after `MainActivity` is displayed. The reporter's Huawei has Bluetooth hardware; that separate failure is excluded from this correction.
 - The upstream assignment request is pending because `@th317erd` does not currently have permission to self-assign.
-- Pull-request CI status and the pull-request link remain pending.
+- GitHub reports no automated checks for the pull-request branch; the local validation above is the available proof at submission time.
