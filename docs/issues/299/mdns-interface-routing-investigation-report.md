@@ -111,11 +111,13 @@ The fixed F-Droid debug APK was installed over the same debug-only package on th
 - Before: the resolver returned only the tunnel address; numeric HTTP returned `200`; `.local` HTTP failed.
 - After: the resolver returned only the Wi-Fi address; both numeric and `.local` HTTP returned `200`.
 
-`git diff --check` also passes. CI and Android 12 emulator results remain pending.
+The fixed APK was also installed on a dedicated Android 12/API 31 x86_64 emulator. The app cold-launched successfully, remained stable after backgrounding, and its forwarded HTTP endpoint returned `200` both before and after backgrounding. The mDNS responder started and announced on the emulator's eligible interfaces. Stock emulator NAT did not carry guest multicast to the host, so host-side `.local` resolution was not treated as a product pass or failure.
+
+`git diff --check` also passes. CI remains pending.
 
 ## Remaining limitations
 
 - The baseline failure has been reproduced on one physical Android device and Linux resolver topology.
-- Android 12 emulator coverage is being prepared separately; emulator NAT may prevent meaningful host-LAN multicast validation.
+- Android 12 runtime and direct-network compatibility were validated, but stock emulator NAT prevented end-to-end host-LAN multicast validation.
 - Windows and phone-hotspot validation have not yet been performed.
-- CI status and pull-request links will be added after implementation.
+- CI status and pull-request links will be added after pull-request creation.
