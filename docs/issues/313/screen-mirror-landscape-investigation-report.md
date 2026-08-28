@@ -5,7 +5,7 @@
 - Issue: https://github.com/plainhub/plain-app/issues/313
 - Repository: https://github.com/plainhub/plain-app
 - Branch/commit tested: `upstream/main` at `716f5e9ae6a5f0ec05c0ecb207dd9c4c31213fea`
-- Pull request: pending
+- Pull request: https://github.com/plainhub/plain-app/pull/350
 
 ## Priority and scope
 
@@ -151,4 +151,4 @@ No physical phone or private device data was used during validation.
 - The reporter's realme/Android 16 hardware is unavailable; reproduction uses Android 12's official emulator image.
 - The emulator's browser path requires a software-decoder preference override because its virtual graphics stack does not expose a usable H.264 hardware decoder. No orientation or coordinate code is modified by that harness override.
 - GitHub denied self-assignment to `@th317erd`; assignment has been requested from `@ismartcoding` in the issue.
-- Pull-request and CI results are pending.
+- Pull-request CI and maintainer review are pending.
