@@ -5,7 +5,7 @@
 - Issue: https://github.com/plainhub/plain-app/issues/299
 - Repository: https://github.com/plainhub/plain-app
 - Branch/commit tested: `upstream/main` at `43eebc1c3dc88328c27363c8dd01c12b6fbfd898`
-- Pull request: pending
+- Pull request: https://github.com/plainhub/plain-app/pull/348
 
 ## Priority and scope
 
@@ -120,4 +120,4 @@ The fixed APK was also installed on a dedicated Android 12/API 31 x86_64 emulato
 - The baseline failure has been reproduced on one physical Android device and Linux resolver topology.
 - Android 12 runtime and direct-network compatibility were validated, but stock emulator NAT prevented end-to-end host-LAN multicast validation.
 - Windows and phone-hotspot validation have not yet been performed.
-- CI status and pull-request links will be added after pull-request creation.
+- CI status is pending for pull request #348.
