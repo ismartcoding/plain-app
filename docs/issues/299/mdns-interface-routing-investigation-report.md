@@ -113,11 +113,11 @@ The fixed F-Droid debug APK was installed over the same debug-only package on th
 
 The fixed APK was also installed on a dedicated Android 12/API 31 x86_64 emulator. The app cold-launched successfully, remained stable after backgrounding, and its forwarded HTTP endpoint returned `200` both before and after backgrounding. The mDNS responder started and announced on the emulator's eligible interfaces. Stock emulator NAT did not carry guest multicast to the host, so host-side `.local` resolution was not treated as a product pass or failure.
 
-`git diff --check` also passes. CI remains pending.
+`git diff --check` also passes. GitHub registered no CI checks for pull request #348 at report-posting time.
 
 ## Remaining limitations
 
 - The baseline failure has been reproduced on one physical Android device and Linux resolver topology.
 - Android 12 runtime and direct-network compatibility were validated, but stock emulator NAT prevented end-to-end host-LAN multicast validation.
 - Windows and phone-hotspot validation have not yet been performed.
-- CI status is pending for pull request #348.
+- No GitHub CI checks were registered for pull request #348 at report-posting time.
