@@ -83,7 +83,7 @@ actual suspend fun getArchivedSmsConversations(): List<com.ismartcoding.plain.fe
 
 actual suspend fun getSmsAllCounts(): DSmsCounts = DSmsCounts(0, 0, 0, 0)
 
-actual fun sendSmsText(number: String, body: String, subscriptionId: Int?) {}
+actual fun sendSmsText(number: String, body: String, subscriptionId: Int?, clientId: String?) {}
 
 actual fun call(number: String, showDialer: Boolean) {}
 
@@ -96,6 +96,8 @@ actual fun launchDefaultSmsApp(
     body: String,
     attachments: List<Pair<String, String>>,
 ): Long = 0L
+
+actual fun getLatestSentMmsId(): Long = 0L
 
 @OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
 actual fun getScreenSize(): Pair<Int, Int> {
@@ -115,7 +117,16 @@ actual fun createContact(input: com.ismartcoding.plain.httpserver.models.Contact
 
 actual suspend fun deleteContacts(ids: Set<String>) {}
 
-actual fun startMmsPolling(pendingId: String, launchTimeSec: Long, attachmentPaths: List<String>) {}
+actual fun startMmsPolling(
+    pendingId: String,
+    launchTimeSec: Long,
+    minimumMmsId: Long,
+    number: String,
+    body: String,
+    threadId: String,
+    attachmentPaths: List<String>,
+    attachmentContentTypes: List<String>,
+) {}
 
 actual suspend fun enableImageSearchAsync() {}
 
