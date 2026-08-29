@@ -30,6 +30,7 @@ private class AndroidSmsSendStateStore(context: Context) : SmsSendStateStore {
     private fun encode(state: SmsPendingSendState): String = JSONObject().apply {
         put("requestId", state.requestId)
         put("clientId", state.clientId ?: JSONObject.NULL)
+        put("clientRequestId", state.clientRequestId ?: JSONObject.NULL)
         put("partCount", state.partCount)
         put("completedParts", JSONArray(state.completedParts.sorted()))
         put("createdAtMillis", state.createdAtMillis)
@@ -44,6 +45,11 @@ private class AndroidSmsSendStateStore(context: Context) : SmsSendStateStore {
         return SmsPendingSendState(
             requestId = json.getString("requestId"),
             clientId = if (json.isNull("clientId")) null else json.getString("clientId"),
+            clientRequestId = if (!json.has("clientRequestId") || json.isNull("clientRequestId")) {
+                null
+            } else {
+                json.getString("clientRequestId")
+            },
             partCount = json.getInt("partCount"),
             completedParts = buildSet {
                 repeat(completed.length()) { add(completed.getInt(it)) }
@@ -75,8 +81,15 @@ object SmsSendResultTracker {
         }
     }
 
-    fun register(context: Context, requestId: String, clientId: String?, partCount: Int, createdAtMillis: Long) {
-        get(context).register(requestId, clientId, partCount, createdAtMillis)
+    fun register(
+        context: Context,
+        requestId: String,
+        clientId: String?,
+        clientRequestId: String?,
+        partCount: Int,
+        createdAtMillis: Long,
+    ) {
+        get(context).register(requestId, clientId, clientRequestId, partCount, createdAtMillis)
     }
 
     fun cancel(context: Context, requestId: String) = get(context).cancel(requestId)

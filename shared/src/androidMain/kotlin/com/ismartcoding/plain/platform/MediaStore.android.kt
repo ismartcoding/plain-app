@@ -276,8 +276,19 @@ actual suspend fun getSmsAllCounts(): DSmsCounts =
         DSmsCounts(it.total, it.inbox, it.sent, it.drafts)
     }
 
-actual fun sendSmsText(number: String, body: String, subscriptionId: Int?, clientId: String?) =
-    com.ismartcoding.plain.features.sms.SmsHelper.sendText(number, body, subscriptionId, clientId)
+actual fun sendSmsText(
+    number: String,
+    body: String,
+    subscriptionId: Int?,
+    clientId: String?,
+    clientRequestId: String?,
+) = com.ismartcoding.plain.features.sms.SmsHelper.sendText(
+    number,
+    body,
+    subscriptionId,
+    clientId,
+    clientRequestId,
+)
 
 actual fun call(number: String, showDialer: Boolean) =
     com.ismartcoding.plain.features.media.CallMediaStoreHelper.call(appContext, number, showDialer)

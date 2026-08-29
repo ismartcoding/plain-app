@@ -163,9 +163,16 @@ expect suspend fun getSmsAllCounts(): DSmsCounts
 /**
  * Send an SMS text message to [number] with body [body].
  * @param subscriptionId SIM subscription id, or null for default.
- * @param clientId optional web-client correlation id returned in the asynchronous result event.
+ * @param clientId web client identity derived from the authenticated request headers.
+ * @param clientRequestId optional per-send correlation id returned in the asynchronous result event.
  */
-expect fun sendSmsText(number: String, body: String, subscriptionId: Int?, clientId: String?)
+expect fun sendSmsText(
+    number: String,
+    body: String,
+    subscriptionId: Int?,
+    clientId: String?,
+    clientRequestId: String?,
+)
 
 /**
  * Initiate a phone call to [number].

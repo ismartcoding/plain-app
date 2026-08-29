@@ -5,6 +5,7 @@ import com.ismartcoding.plain.events.SmsSendResultData
 data class SmsPendingSendState(
     val requestId: String,
     val clientId: String?,
+    val clientRequestId: String?,
     val partCount: Int,
     val completedParts: Set<Int>,
     val createdAtMillis: Long,
@@ -13,6 +14,11 @@ data class SmsPendingSendState(
     val terminalAtMillis: Long? = null,
 )
 
+/**
+ * Storage boundary for SMS callback state. Android's sent `PendingIntent` can
+ * outlive this app process, so the production implementation must be durable;
+ * host tests use an in-memory implementation to exercise the state machine.
+ */
 interface SmsSendStateStore {
     fun read(requestId: String): SmsPendingSendState?
     fun readAll(): List<SmsPendingSendState>
@@ -22,11 +28,18 @@ interface SmsSendStateStore {
 
 class SmsSendStateTracker(private val store: SmsSendStateStore) {
     @Synchronized
-    fun register(requestId: String, clientId: String?, partCount: Int, createdAtMillis: Long) {
+    fun register(
+        requestId: String,
+        clientId: String?,
+        clientRequestId: String?,
+        partCount: Int,
+        createdAtMillis: Long,
+    ) {
         store.write(
             SmsPendingSendState(
                 requestId = requestId,
                 clientId = clientId,
+                clientRequestId = clientRequestId,
                 partCount = partCount.coerceAtLeast(1),
                 completedParts = emptySet(),
                 createdAtMillis = createdAtMillis,
@@ -53,14 +66,19 @@ class SmsSendStateTracker(private val store: SmsSendStateStore) {
     fun terminalResults(): List<SmsSendResultData> = store.readAll().mapNotNull { state ->
         val success = state.terminalSuccess ?: return@mapNotNull null
         val resultCode = state.terminalResultCode ?: return@mapNotNull null
-        SmsSendResultData(state.clientId, success, resultCode)
+        SmsSendResultData(state.clientId, state.clientRequestId, success, resultCode)
     }
 
     @Synchronized
     fun expire(requestId: String, terminalAtMillis: Long): SmsSendResultData? {
         val send = store.read(requestId) ?: return null
         if (send.terminalResultCode != null) return null
-        val result = SmsSendResultData(send.clientId, false, SmsProviderContract.SEND_RESULT_TIMEOUT)
+        val result = SmsSendResultData(
+            send.clientId,
+            send.clientRequestId,
+            false,
+            SmsProviderContract.SEND_RESULT_TIMEOUT,
+        )
         store.write(
             send.copy(
                 terminalSuccess = result.success,
@@ -85,7 +103,7 @@ class SmsSendStateTracker(private val store: SmsSendStateStore) {
         if (partCount.coerceAtLeast(1) != send.partCount || partIndex !in 0 until send.partCount) return null
 
         if (resultCode != successResultCode) {
-            val result = SmsSendResultData(send.clientId, false, resultCode)
+            val result = SmsSendResultData(send.clientId, send.clientRequestId, false, resultCode)
             store.write(
                 send.copy(
                     terminalSuccess = false,
@@ -102,7 +120,7 @@ class SmsSendStateTracker(private val store: SmsSendStateStore) {
             return null
         }
 
-        val result = SmsSendResultData(send.clientId, true, resultCode)
+        val result = SmsSendResultData(send.clientId, send.clientRequestId, true, resultCode)
         store.write(
             send.copy(
                 completedParts = completedParts,

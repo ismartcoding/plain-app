@@ -54,7 +54,13 @@ object SmsHelper {
 
     private val smsTimeoutJobs = ConcurrentHashMap<String, Job>()
 
-    fun sendText(to: String, message: String, subscriptionId: Int? = null, clientId: String? = null) {
+    fun sendText(
+        to: String,
+        message: String,
+        subscriptionId: Int? = null,
+        clientId: String? = null,
+        clientRequestId: String? = null,
+    ) {
         val manager: SmsManager = if (subscriptionId != null && subscriptionId >= 0) {
             @Suppress("DEPRECATION")
             SmsManager.getSmsManagerForSubscriptionId(subscriptionId)
@@ -63,7 +69,14 @@ object SmsHelper {
         }
         val parts = manager.divideMessage(message)
         val requestId = UUID.randomUUID().toString()
-        SmsSendResultTracker.register(appContext, requestId, clientId, parts.size, TimeHelper.nowMillis())
+        SmsSendResultTracker.register(
+            appContext,
+            requestId,
+            clientId,
+            clientRequestId,
+            parts.size,
+            TimeHelper.nowMillis(),
+        )
         val sentIntents = ArrayList(parts.indices.map { partIndex ->
             val identity = SmsProviderContract.smsSentIntentIdentity(appContext.packageName, requestId, partIndex)
             val intent = Intent(appContext, SmsSentReceiver::class.java).apply {
@@ -143,8 +156,7 @@ object SmsHelper {
 
     internal suspend fun dispatchSmsSendResult(requestId: String, result: SmsSendResultData) {
         sendSmsResultEvent(result)
-        // WebSocket events are broadcast and the GraphQL correlation ID is not a
-        // WebSocket session ID, so a successful send to some session cannot prove
+        // WebSocket events are broadcast, so a successful send to some session cannot prove
         // that the originating browser received it. Retain the terminal result as
         // a bounded outbox entry for reconnect replay; cleanup is time-limited.
         scheduleSmsTerminalCleanup(requestId, SMS_SEND_TIMEOUT_MILLIS)

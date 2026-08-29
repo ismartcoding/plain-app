@@ -91,6 +91,7 @@ data class SmsProviderChangedData(
 @Serializable
 data class SmsSendResultData(
     val clientId: String?,
+    val requestId: String?,
     val success: Boolean,
     val resultCode: Int,
 )

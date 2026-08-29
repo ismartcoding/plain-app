@@ -87,11 +87,11 @@ class SmsSyncContractTest {
     @Test
     fun `multipart SMS emits success only after every part succeeds`() {
         val tracker = newSmsTracker()
-        tracker.register("request", "client", 2, 100L)
+        tracker.register("request", "client", "pending-a", 2, 100L)
 
         assertEquals(null, tracker.record("request", 0, 2, -1, -1, 200L))
         assertEquals(
-            SmsSendResultData("client", true, -1),
+            SmsSendResultData("client", "pending-a", true, -1),
             tracker.record("request", 1, 2, -1, -1, 300L),
         )
     }
@@ -99,22 +99,38 @@ class SmsSyncContractTest {
     @Test
     fun `multipart SMS emits one terminal failure`() {
         val tracker = newSmsTracker()
-        tracker.register("request", "client", 2, 100L)
+        tracker.register("request", "client", "pending-a", 2, 100L)
 
         assertEquals(
-            SmsSendResultData("client", false, 4),
+            SmsSendResultData("client", "pending-a", false, 4),
             tracker.record("request", 0, 2, 4, -1, 200L),
         )
         assertEquals(null, tracker.record("request", 1, 2, -1, -1, 300L))
     }
 
     @Test
-    fun `SMS send timeout removes pending correlation exactly once`() {
+    fun `one client can correlate concurrent SMS sends independently`() {
         val tracker = newSmsTracker()
-        tracker.register("request", "client", 1, 100L)
+        tracker.register("send-a", "client", "pending-a", 1, 100L)
+        tracker.register("send-b", "client", "pending-b", 1, 110L)
 
         assertEquals(
-            SmsSendResultData("client", false, SmsProviderContract.SEND_RESULT_TIMEOUT),
+            SmsSendResultData("client", "pending-b", false, 4),
+            tracker.record("send-b", 0, 1, 4, -1, 200L),
+        )
+        assertEquals(
+            SmsSendResultData("client", "pending-a", true, -1),
+            tracker.record("send-a", 0, 1, -1, -1, 210L),
+        )
+    }
+
+    @Test
+    fun `SMS send timeout removes pending correlation exactly once`() {
+        val tracker = newSmsTracker()
+        tracker.register("request", "client", "pending-a", 1, 100L)
+
+        assertEquals(
+            SmsSendResultData("client", "pending-a", false, SmsProviderContract.SEND_RESULT_TIMEOUT),
             tracker.expire("request", 500L),
         )
         assertEquals(null, tracker.expire("request", 600L))
@@ -126,13 +142,16 @@ class SmsSyncContractTest {
     fun `terminal SMS result remains replayable until bounded outbox cleanup`() {
         val store = FakeSmsSendStateStore()
         SmsSendStateTracker(store).apply {
-            register("request", "client", 1, 100L)
-            assertEquals(SmsSendResultData("client", true, -1), record("request", 0, 1, -1, -1, 500L))
+            register("request", "client", "pending-a", 1, 100L)
+            assertEquals(
+                SmsSendResultData("client", "pending-a", true, -1),
+                record("request", 0, 1, -1, -1, 500L),
+            )
         }
 
         val restored = SmsSendStateTracker(store)
-        assertEquals(listOf(SmsSendResultData("client", true, -1)), restored.terminalResults())
-        assertEquals(listOf(SmsSendResultData("client", true, -1)), restored.terminalResults())
+        assertEquals(listOf(SmsSendResultData("client", "pending-a", true, -1)), restored.terminalResults())
+        assertEquals(listOf(SmsSendResultData("client", "pending-a", true, -1)), restored.terminalResults())
         assertEquals(500L, restored.pending().single().terminalAtMillis)
         restored.acknowledge("request")
         assertTrue(restored.terminalResults().isEmpty())
@@ -142,13 +161,13 @@ class SmsSyncContractTest {
     fun `multipart SMS state survives tracker recreation`() {
         val store = FakeSmsSendStateStore()
         SmsSendStateTracker(store).apply {
-            register("request", "client", 2, 100L)
+            register("request", "client", "pending-a", 2, 100L)
             assertEquals(null, record("request", 0, 2, -1, -1, 200L))
         }
 
         val restored = SmsSendStateTracker(store)
         assertEquals(
-            SmsSendResultData("client", true, -1),
+            SmsSendResultData("client", "pending-a", true, -1),
             restored.record("request", 1, 2, -1, -1, 300L),
         )
         assertEquals(setOf(0, 1), restored.pending().single().completedParts)

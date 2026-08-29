@@ -6,6 +6,8 @@ import com.ismartcoding.plain.features.sms.DMessage
 import com.ismartcoding.plain.features.sms.DMessageAttachment
 import com.ismartcoding.plain.features.sms.DPendingMms
 import com.ismartcoding.plain.features.sms.SmsProviderContract
+import com.ismartcoding.plain.httpserver.http.GraphqlRequestContext
+import com.ismartcoding.plain.lib.kgraphql.Context
 import com.ismartcoding.plain.lib.kgraphql.GraphQLError
 import com.ismartcoding.plain.lib.kgraphql.annotations.GraphQLMutation
 import com.ismartcoding.plain.lib.kgraphql.annotations.GraphQLQuery
@@ -61,11 +63,18 @@ suspend fun unarchiveConversation(id: String): Boolean {
 }
 
 @GraphQLMutation
-suspend fun sendSms(number: String, body: String, subscriptionId: Int, clientId: String? = null): Boolean {
+suspend fun sendSms(
+    number: String,
+    body: String,
+    subscriptionId: Int,
+    requestId: String? = null,
+    context: Context,
+): Boolean {
     Permission.SEND_SMS.checkEnabledAsync()
     val simId = if (subscriptionId >= 0) subscriptionId else null
+    val clientId = context.get<GraphqlRequestContext>()?.header("c-id")
     try {
-        sendSmsText(number, body, simId, clientId)
+        sendSmsText(number, body, simId, clientId, requestId)
     } catch (e: Exception) {
         e.printStackTrace()
         throw GraphQLError(e.message ?: "Invalid SMS input")

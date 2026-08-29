@@ -83,7 +83,13 @@ actual suspend fun getArchivedSmsConversations(): List<com.ismartcoding.plain.fe
 
 actual suspend fun getSmsAllCounts(): DSmsCounts = DSmsCounts(0, 0, 0, 0)
 
-actual fun sendSmsText(number: String, body: String, subscriptionId: Int?, clientId: String?) {}
+actual fun sendSmsText(
+    number: String,
+    body: String,
+    subscriptionId: Int?,
+    clientId: String?,
+    clientRequestId: String?,
+) {}
 
 actual fun call(number: String, showDialer: Boolean) {}
 
