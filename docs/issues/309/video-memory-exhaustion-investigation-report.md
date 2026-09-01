@@ -5,7 +5,7 @@
 - Issue: https://github.com/plainhub/plain-app/issues/309
 - Repository: https://github.com/plainhub/plain-app
 - Branch/commit tested: `upstream/main` at `4ae019bab2cecd212a2628da764409494bcdd7f7`
-- Pull request: pending
+- Pull request: https://github.com/plainhub/plain-app/pull/353
 
 ## Priority and scope
 
